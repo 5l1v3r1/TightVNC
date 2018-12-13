@@ -157,9 +157,9 @@ public abstract class Renderer {
     /**
      * Draw paletted byte array bitmap data
      *
-     * @param buffer  bitmap data
-     * @param rect    bitmap location and dimensions
-     * @param palette colour palette
+     * @param buffer      bitmap data
+     * @param rect        bitmap location and dimensions
+     * @param palette     colour palette
      * @param paletteSize number of colors in palette
      */
     public void drawBytesWithPalette(byte[] buffer, FramebufferUpdateRectangle rect,

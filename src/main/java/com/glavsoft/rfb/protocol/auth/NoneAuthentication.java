@@ -31,15 +31,15 @@ import com.glavsoft.transport.Writer;
 
 public class NoneAuthentication extends AuthHandler {
 
-	@Override
-	public boolean authenticate(Reader reader, Writer writer,
-			CapabilityContainer authCaps, IPasswordRetriever passwordRetriever) {
-		return false;
-	}
+    @Override
+    public boolean authenticate(Reader reader, Writer writer,
+                                CapabilityContainer authCaps, IPasswordRetriever passwordRetriever) {
+        return false;
+    }
 
-	@Override
-	public SecurityType getType() {
-		return SecurityType.NONE_AUTHENTICATION;
-	}
+    @Override
+    public SecurityType getType() {
+        return SecurityType.NONE_AUTHENTICATION;
+    }
 
 }

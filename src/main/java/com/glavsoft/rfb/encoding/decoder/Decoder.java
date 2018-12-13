@@ -31,15 +31,15 @@ import com.glavsoft.transport.Reader;
 
 public abstract class Decoder {
 
-	/**
-	 * Decode rectangle data.
-	 */
-	abstract public void decode(Reader reader, Renderer renderer,
-    		FramebufferUpdateRectangle rect) throws TransportException;
+    /**
+     * Decode rectangle data.
+     */
+    abstract public void decode(Reader reader, Renderer renderer,
+                                FramebufferUpdateRectangle rect) throws TransportException;
 
-	/**
-	 * Reset decoder when needed. Ex. reset ZLib stream inflaters for Z* and Tight decoders.
-	 */
+    /**
+     * Reset decoder when needed. Ex. reset ZLib stream inflaters for Z* and Tight decoders.
+     */
     public void reset() { /*empty*/ }
 
 }

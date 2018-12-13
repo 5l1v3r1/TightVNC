@@ -31,92 +31,98 @@ import com.glavsoft.transport.Reader;
  * Structure used to describe protocol options such as tunneling methods,
  * authentication schemes and message types (protocol versions 3.7t, 3.8t).
  * typedef struct _rfbCapabilityInfo {
- *  CARD32 code;                // numeric identifier
- *  CARD8 vendorSignature[4];   // vendor identification
- *  CARD8 nameSignature[8];     // abbreviated option name
+ * CARD32 code;                // numeric identifier
+ * CARD8 vendorSignature[4];   // vendor identification
+ * CARD8 nameSignature[8];     // abbreviated option name
  * } rfbCapabilityInfo;
  */
 public class RfbCapabilityInfo {
-	/*
-	 * Vendors known by TightVNC: standard VNC/RealVNC, TridiaVNC, and TightVNC.
-	 * #define rfbStandardVendor "STDV"
-	 * #define rfbTridiaVncVendor "TRDV"
-	 * #define rfbTightVncVendor "TGHT"
-	 */
-	public static final String VENDOR_STANDARD = "STDV";
-	public static final String VENDOR_TRIADA = "TRDV";
-	public static final String VENDOR_TIGHT = "TGHT";
+    /*
+     * Vendors known by TightVNC: standard VNC/RealVNC, TridiaVNC, and TightVNC.
+     * #define rfbStandardVendor "STDV"
+     * #define rfbTridiaVncVendor "TRDV"
+     * #define rfbTightVncVendor "TGHT"
+     */
+    public static final String VENDOR_STANDARD = "STDV";
+    public static final String VENDOR_TRIADA = "TRDV";
+    public static final String VENDOR_TIGHT = "TGHT";
 
-	public static final String TUNNELING_NO_TUNNELING = "NOTUNNEL";
+    public static final String TUNNELING_NO_TUNNELING = "NOTUNNEL";
 
-	public static final String AUTHENTICATION_NO_AUTH = "NOAUTH__";
-	public static final String AUTHENTICATION_VNC_AUTH ="VNCAUTH_";
+    public static final String AUTHENTICATION_NO_AUTH = "NOAUTH__";
+    public static final String AUTHENTICATION_VNC_AUTH = "VNCAUTH_";
 
-	public static final String ENCODING_COPYRECT = "COPYRECT";
-	public static final String ENCODING_HEXTILE = "HEXTILE_";
-	public static final String ENCODING_ZLIB = "ZLIB____";
-	public static final String ENCODING_ZRLE = "ZRLE____";
-	public static final String ENCODING_RRE = "RRE_____";
-	public static final String ENCODING_TIGHT = "TIGHT___";
-	// "Pseudo" encoding types
-	public static final String ENCODING_RICH_CURSOR = "RCHCURSR";
-	public static final String ENCODING_CURSOR_POS = "POINTPOS";
-	public static final String ENCODING_DESKTOP_SIZE = "NEWFBSIZ";
+    public static final String ENCODING_COPYRECT = "COPYRECT";
+    public static final String ENCODING_HEXTILE = "HEXTILE_";
+    public static final String ENCODING_ZLIB = "ZLIB____";
+    public static final String ENCODING_ZRLE = "ZRLE____";
+    public static final String ENCODING_RRE = "RRE_____";
+    public static final String ENCODING_TIGHT = "TIGHT___";
+    // "Pseudo" encoding types
+    public static final String ENCODING_RICH_CURSOR = "RCHCURSR";
+    public static final String ENCODING_CURSOR_POS = "POINTPOS";
+    public static final String ENCODING_DESKTOP_SIZE = "NEWFBSIZ";
 
-	private int code;
-	private String vendorSignature;
-	private String nameSignature;
-	private boolean enable;
+    private int code;
+    private String vendorSignature;
+    private String nameSignature;
+    private boolean enable;
 
-	public RfbCapabilityInfo(int code, String vendorSignature, String nameSignature) {
-		this.code = code;
-		this.vendorSignature = vendorSignature;
-		this.nameSignature = nameSignature;
-		enable = true;
-	}
+    public RfbCapabilityInfo(int code, String vendorSignature, String nameSignature) {
+        this.code = code;
+        this.vendorSignature = vendorSignature;
+        this.nameSignature = nameSignature;
+        enable = true;
+    }
 
-	public RfbCapabilityInfo(Reader reader) throws TransportException {
-		code = reader.readInt32();
-		vendorSignature = reader.readString(4);
-		nameSignature = reader.readString(8);
-	}
+    public RfbCapabilityInfo(Reader reader) throws TransportException {
+        code = reader.readInt32();
+        vendorSignature = reader.readString(4);
+        nameSignature = reader.readString(8);
+    }
 
-	@Override
-	public boolean equals(Object otherObj) {
-		if (this == otherObj) { return true; }
-		if (null == otherObj) { return false; }
-		if (getClass() != otherObj.getClass()) { return false; }
-		RfbCapabilityInfo other = (RfbCapabilityInfo) otherObj;
-		return code == other.code &&
-			vendorSignature.equals(other.vendorSignature) &&
-			nameSignature.equals(other.nameSignature);
-	}
+    @Override
+    public boolean equals(Object otherObj) {
+        if (this == otherObj) {
+            return true;
+        }
+        if (null == otherObj) {
+            return false;
+        }
+        if (getClass() != otherObj.getClass()) {
+            return false;
+        }
+        RfbCapabilityInfo other = (RfbCapabilityInfo) otherObj;
+        return code == other.code &&
+                vendorSignature.equals(other.vendorSignature) &&
+                nameSignature.equals(other.nameSignature);
+    }
 
-	public void setEnable(boolean enable) {
-		this.enable = enable;
-	}
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
 
-	public int getCode() {
-		return code;
-	}
+    public int getCode() {
+        return code;
+    }
 
-	public String getVendorSignature() {
-		return vendorSignature;
-	}
+    public String getVendorSignature() {
+        return vendorSignature;
+    }
 
-	public String getNameSignature() {
-		return nameSignature;
-	}
+    public String getNameSignature() {
+        return nameSignature;
+    }
 
-	public boolean isEnabled() {
-		return enable;
-	}
+    public boolean isEnabled() {
+        return enable;
+    }
 
-	@Override
-	public String toString() {
-		return "RfbCapabilityInfo: [code: " + code +
-		", vendor: " + vendorSignature +
-		", name: " + nameSignature +
-		"]";
-	}
+    @Override
+    public String toString() {
+        return "RfbCapabilityInfo: [code: " + code +
+                ", vendor: " + vendorSignature +
+                ", name: " + nameSignature +
+                "]";
+    }
 }

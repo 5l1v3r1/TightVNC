@@ -30,8 +30,8 @@ package com.glavsoft.exceptions;
 @SuppressWarnings("serial")
 public class ClosedConnectionException extends TransportException {
 
-	public ClosedConnectionException(Throwable exception) {
-		super(exception);
-	}
+    public ClosedConnectionException(Throwable exception) {
+        super(exception);
+    }
 
 }

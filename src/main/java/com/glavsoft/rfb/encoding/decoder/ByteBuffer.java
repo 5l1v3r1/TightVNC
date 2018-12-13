@@ -29,30 +29,31 @@ package com.glavsoft.rfb.encoding.decoder;
  * Singleton for share among decoders.
  */
 public class ByteBuffer {
-	private static ByteBuffer instance = new ByteBuffer();
-	private byte [] buffer = new byte[0];
+    private static ByteBuffer instance = new ByteBuffer();
+    private byte[] buffer = new byte[0];
 
-	private ByteBuffer() { /*empty*/ }
-	public static ByteBuffer getInstance() {
-		return instance;
-	}
+    private ByteBuffer() { /*empty*/ }
 
-	/**
-	 * Checks for buffer capacity is enougth ( < length) and enlarge it if not
-	 *
-	 * @param length
-	 */
-	public void correctBufferCapacity(int length) {
-		// procondition: buffer != null
-		assert (buffer != null);
-		if (buffer.length < length) {
-			buffer = new byte[length];
-		}
-	}
+    public static ByteBuffer getInstance() {
+        return instance;
+    }
 
-	public byte[] getBuffer(int length) {
-		correctBufferCapacity(length);
-		return buffer;
-	}
+    /**
+     * Checks for buffer capacity is enougth ( < length) and enlarge it if not
+     *
+     * @param length
+     */
+    public void correctBufferCapacity(int length) {
+        // procondition: buffer != null
+        assert (buffer != null);
+        if (buffer.length < length) {
+            buffer = new byte[length];
+        }
+    }
+
+    public byte[] getBuffer(int length) {
+        correctBufferCapacity(length);
+        return buffer;
+    }
 
 }

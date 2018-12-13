@@ -16,6 +16,6 @@ public enum LocalMouseCursorShape {
     }
 
     public String getCursorName() {
-        return  cursorName;
+        return cursorName;
     }
 }

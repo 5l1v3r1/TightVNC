@@ -39,41 +39,42 @@ import java.util.concurrent.TimeUnit;
  * Utils for Swing GUI
  */
 public class Utils {
-	private static List<Image> icons;
+    private static List<Image> icons;
 
-	private static List<Image> getApplicationIcons() {
-		if (icons != null) {
-			return icons;
-		}
-		icons = new LinkedList<Image>();
-		URL resource = Utils.class.getResource("/com/glavsoft/viewer/images/tightvnc-logo-16x16.png");
-		Image image = resource != null ?
-				Toolkit.getDefaultToolkit().getImage(resource) :
-				null;
-		if (image != null) {
-			icons.add(image);
-		}
-		resource = Utils.class.getResource("/com/glavsoft/viewer/images/tightvnc-logo-32x32.png");
-		image = resource != null ?
-				Toolkit.getDefaultToolkit().getImage(resource) :
-				null;
-		if (image != null) {
-			icons.add(image);
-		}
-		return icons;
-	}
+    private static List<Image> getApplicationIcons() {
+        if (icons != null) {
+            return icons;
+        }
+        icons = new LinkedList<Image>();
+        URL resource = Utils.class.getResource("/com/glavsoft/viewer/images/tightvnc-logo-16x16.png");
+        Image image = resource != null ?
+                Toolkit.getDefaultToolkit().getImage(resource) :
+                null;
+        if (image != null) {
+            icons.add(image);
+        }
+        resource = Utils.class.getResource("/com/glavsoft/viewer/images/tightvnc-logo-32x32.png");
+        image = resource != null ?
+                Toolkit.getDefaultToolkit().getImage(resource) :
+                null;
+        if (image != null) {
+            icons.add(image);
+        }
+        return icons;
+    }
 
-	public static ImageIcon getButtonIcon(String name) {
-		URL resource = Utils.class.getResource("/com/glavsoft/viewer/images/button-"+name+".png");
-		return resource != null ? new ImageIcon(resource) : null;
-	}
+    public static ImageIcon getButtonIcon(String name) {
+        URL resource = Utils.class.getResource("/com/glavsoft/viewer/images/button-" + name + ".png");
+        return resource != null ? new ImageIcon(resource) : null;
+    }
 
     private static Map<LocalMouseCursorShape, Cursor> cursorCash = new HashMap<LocalMouseCursorShape, Cursor>();
+
     public static Cursor getCursor(LocalMouseCursorShape cursorShape) {
         Cursor cursor = cursorCash.get(cursorShape);
         if (cursor != null) return cursor;
         String name = cursorShape.getCursorName();
-        URL resource = Utils.class.getResource("/com/glavsoft/viewer/images/cursor-"+name+".png");
+        URL resource = Utils.class.getResource("/com/glavsoft/viewer/images/cursor-" + name + ".png");
         if (resource != null) {
             Image image = Toolkit.getDefaultToolkit().getImage(resource);
             if (image != null) {
@@ -85,7 +86,7 @@ public class Utils {
                         if (isReady) {
                             done.countDown();
                         }
-                        return ! isReady;
+                        return !isReady;
                     }
                 });
                 try {
@@ -96,10 +97,10 @@ public class Utils {
                 int w = image.getWidth(null);
                 int h = image.getHeight(null);
                 if (w < 0 || h < 0) return Cursor.getDefaultCursor();
-                w = (int)((w-0.5) / 2);
-                h = (int)((h-0.5) / 2);
+                w = (int) ((w - 0.5) / 2);
+                h = (int) ((h - 0.5) / 2);
                 cursor = Toolkit.getDefaultToolkit().createCustomCursor(
-                        image, new Point(w > 0 ? w: 0, h > 0 ? h : 0), name);
+                        image, new Point(w > 0 ? w : 0, h > 0 ? h : 0), name);
                 if (cursor != null) cursorCash.put(cursorShape, cursor);
             }
         }
@@ -112,25 +113,25 @@ public class Utils {
         } catch (SecurityException e) {
             // nop
         }
-		dialog.pack();
+        dialog.pack();
         if (dialog instanceof JDialog) {
-		    ((JDialog)dialog).setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
+            ((JDialog) dialog).setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
         }
         dialog.toFront();
-		Utils.setApplicationIconsForWindow(dialog);
-	}
+        Utils.setApplicationIconsForWindow(dialog);
+    }
 
-	public static void setApplicationIconsForWindow(Window window) {
-		List<Image> icons = getApplicationIcons();
-		if (icons.size() != 0) {
-			window.setIconImages(icons);
-		}
-	}
+    public static void setApplicationIconsForWindow(Window window) {
+        List<Image> icons = getApplicationIcons();
+        if (icons.size() != 0) {
+            window.setIconImages(icons);
+        }
+    }
 
-	public static void centerWindow(Window window) {
+    public static void centerWindow(Window window) {
         Point locationPoint = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
-		Rectangle bounds = window.getBounds();
-		locationPoint.setLocation(locationPoint.x - bounds.width/2, locationPoint.y - bounds.height/2);
-		window.setLocation(locationPoint);
-	}
+        Rectangle bounds = window.getBounds();
+        locationPoint.setLocation(locationPoint.x - bounds.width / 2, locationPoint.y - bounds.height / 2);
+        window.setLocation(locationPoint);
+    }
 }

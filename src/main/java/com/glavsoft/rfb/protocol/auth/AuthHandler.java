@@ -33,34 +33,40 @@ import com.glavsoft.transport.Reader;
 import com.glavsoft.transport.Writer;
 
 public abstract class AuthHandler {
-	/**
-	 * Authenticate using apropriate auth scheme
-	 * @param reader
-	 * @param writer
-	 * @param passwordRetriever interface that realise callback function for password retrieving,
-	 * ex. by asking user with dialog frame etc.
-	 * @param authCaps authentication capabilities
-	 *
-	 * @return true if there was Tight protocol extention used, false - in the other way
-	 * @throws TransportException
-	 * @throws FatalException
-	 * @throws UnsupportedSecurityTypeException
-	 */
-	public abstract boolean authenticate(Reader reader, Writer writer,
-			CapabilityContainer authCaps, IPasswordRetriever passwordRetriever)
-		throws TransportException, FatalException, UnsupportedSecurityTypeException;
-	protected boolean useSecurityResult = true;
-	public abstract SecurityType getType();
-	public int getId() {
-		return getType().getId();
-	}
-	public String getName() {
-		return getType().name();
-	}
-	public boolean useSecurityResult() {
-		return useSecurityResult;
-	}
-	public void setUseSecurityResult(boolean enabled) {
-		useSecurityResult = enabled;
-	}
+    /**
+     * Authenticate using apropriate auth scheme
+     *
+     * @param reader
+     * @param writer
+     * @param passwordRetriever interface that realise callback function for password retrieving,
+     *                          ex. by asking user with dialog frame etc.
+     * @param authCaps          authentication capabilities
+     * @return true if there was Tight protocol extention used, false - in the other way
+     * @throws TransportException
+     * @throws FatalException
+     * @throws UnsupportedSecurityTypeException
+     */
+    public abstract boolean authenticate(Reader reader, Writer writer,
+                                         CapabilityContainer authCaps, IPasswordRetriever passwordRetriever)
+            throws TransportException, FatalException, UnsupportedSecurityTypeException;
+
+    protected boolean useSecurityResult = true;
+
+    public abstract SecurityType getType();
+
+    public int getId() {
+        return getType().getId();
+    }
+
+    public String getName() {
+        return getType().name();
+    }
+
+    public boolean useSecurityResult() {
+        return useSecurityResult;
+    }
+
+    public void setUseSecurityResult(boolean enabled) {
+        useSecurityResult = enabled;
+    }
 }

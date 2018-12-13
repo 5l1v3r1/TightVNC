@@ -50,7 +50,7 @@ public class Presenter {
         registeredViews.put(name, view);
     }
 
-    public void  addModel(String name, Model model) {
+    public void addModel(String name, Model model) {
         registeredModels.put(name, model);
     }
 
@@ -63,7 +63,7 @@ public class Presenter {
         }
     }
 
-    public void  populateFrom(String modelName) {
+    public void populateFrom(String modelName) {
         Model model = registeredModels.get(modelName);
         if (modelName != null) {
             populateFrom(modelName, model);
@@ -80,7 +80,7 @@ public class Presenter {
                 try {
                     final Object property = m.invoke(model);
                     logger.finest("Load: " + modelName + ".get" + propertyName + "() # => " + property +
-                        "  type: " + m.getReturnType());
+                            "  type: " + m.getReturnType());
                     setViewProperty(propertyName, property, m.getReturnType()); // TODO this can set savedInvocationTargetEx, so what to do whith it?
                 } catch (IllegalAccessException e) {
                     // nop

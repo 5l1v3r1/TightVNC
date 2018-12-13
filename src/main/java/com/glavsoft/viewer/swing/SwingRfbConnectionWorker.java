@@ -45,8 +45,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
 /**
-* @author dime at tightvnc.com
-*/
+ * @author dime at tightvnc.com
+ */
 public class SwingRfbConnectionWorker extends SwingWorker<Void, String> implements RfbConnectionWorker, IRfbSessionListener {
 
     private String predefinedPassword;
@@ -165,12 +165,12 @@ public class SwingRfbConnectionWorker extends SwingWorker<Void, String> implemen
     }
 
     @Override
-	public void rfbSessionStopped(final String reason) {
+    public void rfbSessionStopped(final String reason) {
         if (workingProtocol != null) {
-			workingProtocol.cleanUpSession();
-		}
-		if (isStoppingProcess) return;
-		cleanUpUISessionAndConnection();
+            workingProtocol.cleanUpSession();
+        }
+        if (isStoppingProcess) return;
+        cleanUpUISessionAndConnection();
         logger.info("Rfb session stopped: " + reason);
         if (presenter.needReconnection()) {
             SwingUtilities.invokeLater(new Runnable() {
@@ -181,7 +181,7 @@ public class SwingRfbConnectionWorker extends SwingWorker<Void, String> implemen
                 }
             });
         }
-	}
+    }
 
     @Override
     public boolean cancel() {
@@ -194,17 +194,17 @@ public class SwingRfbConnectionWorker extends SwingWorker<Void, String> implemen
     }
 
     private synchronized void cleanUpUISessionAndConnection() {
-		isStoppingProcess = true;
-		if (workingSocket != null && workingSocket.isConnected()) {
-			try {
-				workingSocket.close();
-			} catch (IOException e) { /*nop*/ }
-		}
-		if (viewerWindow != null) {
+        isStoppingProcess = true;
+        if (workingSocket != null && workingSocket.isConnected()) {
+            try {
+                workingSocket.close();
+            } catch (IOException e) { /*nop*/ }
+        }
+        if (viewerWindow != null) {
             viewerWindow.close();
-		}
-		isStoppingProcess = false;
-	}
+        }
+        isStoppingProcess = false;
+    }
 
     @Override
     public void setWorkingSocket(Socket workingSocket) {

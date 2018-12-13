@@ -24,10 +24,8 @@
 
 package com.glavsoft.viewer;
 
-import com.glavsoft.rfb.protocol.Protocol;
 import com.glavsoft.rfb.protocol.ProtocolSettings;
 
-import javax.swing.*;
 import java.net.Socket;
 
 /**

@@ -35,83 +35,84 @@ import java.util.Map;
  * Command line interface parameters parser
  */
 public class Parser {
-	private final Map<String, Option> options = new LinkedHashMap<String, Option>();
-	private final List<String> plainOptions = new ArrayList<String>();
-	private boolean isSetPlainOptions = false;
+    private final Map<String, Option> options = new LinkedHashMap<String, Option>();
+    private final List<String> plainOptions = new ArrayList<String>();
+    private boolean isSetPlainOptions = false;
 
-	public void addOption(String opName, String defaultValue, String desc) {
-		Option op = new Option(opName, defaultValue, desc);
-		options.put(opName.toLowerCase(), op);
-	}
+    public void addOption(String opName, String defaultValue, String desc) {
+        Option op = new Option(opName, defaultValue, desc);
+        options.put(opName.toLowerCase(), op);
+    }
 
-	public void parse(String [] args) {
-		for (String p : args) {
-			if (p.startsWith("-")) {
-				int skipMinuses = p.startsWith("--") ? 2 : 1;
-				String[] params = p.split("=", 2);
-				Option op = options.get(params[0].toLowerCase().substring(skipMinuses));
-				if (op != null) {
-					op.isSet = true;
-					if (params.length > 1 && ! Strings.isTrimmedEmpty(params[1])) {
-						op.value = params[1];
-					}
-				}
-			} else if ( ! p.startsWith("-")) {
-				isSetPlainOptions = true;
-				plainOptions.add(p);
-			}
-		}
-	}
+    public void parse(String[] args) {
+        for (String p : args) {
+            if (p.startsWith("-")) {
+                int skipMinuses = p.startsWith("--") ? 2 : 1;
+                String[] params = p.split("=", 2);
+                Option op = options.get(params[0].toLowerCase().substring(skipMinuses));
+                if (op != null) {
+                    op.isSet = true;
+                    if (params.length > 1 && !Strings.isTrimmedEmpty(params[1])) {
+                        op.value = params[1];
+                    }
+                }
+            } else if (!p.startsWith("-")) {
+                isSetPlainOptions = true;
+                plainOptions.add(p);
+            }
+        }
+    }
 
-	public String getValueFor(String param) {
-		Option op = options.get(param.toLowerCase());
-		return op != null ? op.value : null;
-	}
+    public String getValueFor(String param) {
+        Option op = options.get(param.toLowerCase());
+        return op != null ? op.value : null;
+    }
 
-	public boolean isSet(String param) {
-		Option op = options.get(param.toLowerCase());
-		return op != null && op.isSet;
-	}
+    public boolean isSet(String param) {
+        Option op = options.get(param.toLowerCase());
+        return op != null && op.isSet;
+    }
 
-	public boolean isSetPlainOptions() {
-		return isSetPlainOptions;
-	}
+    public boolean isSetPlainOptions() {
+        return isSetPlainOptions;
+    }
 
-	public String getPlainOptionAt(int index) {
-		return plainOptions.get(index);
-	}
+    public String getPlainOptionAt(int index) {
+        return plainOptions.get(index);
+    }
 
-	public int getPlainOptionsNumber() {
-		return plainOptions.size();
-	}
+    public int getPlainOptionsNumber() {
+        return plainOptions.size();
+    }
 
-	/**
-	 * Command line interface option
-	 */
-	private static class Option {
-		protected String opName, defaultValue, desc, value;
-		protected boolean isSet = false;
-		public Option(String opName, String defaultValue, String desc) {
-			this.opName = opName;
-			this.defaultValue = defaultValue;
-			this.desc = desc;
-			this.value = defaultValue;
-		}
-	}
+    /**
+     * Command line interface option
+     */
+    private static class Option {
+        protected String opName, defaultValue, desc, value;
+        protected boolean isSet = false;
 
-	public String optionsUsage() {
-		StringBuilder sb = new StringBuilder();
-		int maxNameLength = 0;
-		for (Option op : options.values()) {
-			maxNameLength = Math.max(maxNameLength, op.opName.length());
-		}
-		for (Option op : options.values()) {
-			sb.append(" -").append(op.opName);
-			for (int i=0; i<maxNameLength - op.opName.length(); ++i) {
-				sb.append(' ');
-			}
-			sb.append(" : ").append(op.desc).append('\n');
-		}
-		return sb.toString();
-	}
+        public Option(String opName, String defaultValue, String desc) {
+            this.opName = opName;
+            this.defaultValue = defaultValue;
+            this.desc = desc;
+            this.value = defaultValue;
+        }
+    }
+
+    public String optionsUsage() {
+        StringBuilder sb = new StringBuilder();
+        int maxNameLength = 0;
+        for (Option op : options.values()) {
+            maxNameLength = Math.max(maxNameLength, op.opName.length());
+        }
+        for (Option op : options.values()) {
+            sb.append(" -").append(op.opName);
+            for (int i = 0; i < maxNameLength - op.opName.length(); ++i) {
+                sb.append(' ');
+            }
+            sb.append(" : ").append(op.desc).append('\n');
+        }
+        return sb.toString();
+    }
 }

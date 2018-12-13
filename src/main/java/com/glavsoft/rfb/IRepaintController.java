@@ -33,10 +33,15 @@ import com.glavsoft.transport.Reader;
  * Interface for sending repaint event from worker thread to GUI thread
  */
 public interface IRepaintController extends IChangeSettingsListener {
-	void repaintBitmap(FramebufferUpdateRectangle rect);
-	void repaintBitmap(int x, int y, int width, int height);
-	void repaintCursor();
-	void updateCursorPosition(short x, short y);
-	Renderer createRenderer(Reader reader, int width, int height, PixelFormat pixelFormat);
-	void setPixelFormat(PixelFormat pixelFormat);
+    void repaintBitmap(FramebufferUpdateRectangle rect);
+
+    void repaintBitmap(int x, int y, int width, int height);
+
+    void repaintCursor();
+
+    void updateCursorPosition(short x, short y);
+
+    Renderer createRenderer(Reader reader, int width, int height, PixelFormat pixelFormat);
+
+    void setPixelFormat(PixelFormat pixelFormat);
 }

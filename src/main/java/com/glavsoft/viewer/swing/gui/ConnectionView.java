@@ -24,9 +24,9 @@
 
 package com.glavsoft.viewer.swing.gui;
 
+import com.glavsoft.viewer.ConnectionPresenter;
 import com.glavsoft.viewer.mvp.View;
 import com.glavsoft.viewer.swing.ConnectionParams;
-import com.glavsoft.viewer.ConnectionPresenter;
 import com.glavsoft.viewer.swing.Utils;
 import com.glavsoft.viewer.swing.WrongParameterException;
 
@@ -48,10 +48,10 @@ public class ConnectionView extends JPanel implements View {
     public static final String CLOSE = "Close";
     public static final String CANCEL = "Cancel";
     private WindowListener appWindowListener;
-	private final boolean hasSshSupport;
+    private final boolean hasSshSupport;
     private final JTextField serverPortField;
-	private JCheckBox useSshTunnelingCheckbox;
-	private final JComboBox serverNameCombo;
+    private JCheckBox useSshTunnelingCheckbox;
+    private final JComboBox serverNameCombo;
     private JTextField sshUserField;
     private JTextField sshHostField;
     private JTextField sshPortField;
@@ -70,17 +70,17 @@ public class ConnectionView extends JPanel implements View {
     public ConnectionView(final WindowListener appWindowListener,
                           final ConnectionPresenter presenter, boolean useSsh) {
         this.appWindowListener = appWindowListener;
-		this.hasSshSupport = useSsh;
+        this.hasSshSupport = useSsh;
         this.presenter = presenter;
 
         setLayout(new BorderLayout(0, 0));
-		JPanel optionsPane = new JPanel(new GridBagLayout());
-		add(optionsPane, BorderLayout.CENTER);
-		optionsPane.setBorder(new EmptyBorder(PADDING, PADDING, PADDING, PADDING));
+        JPanel optionsPane = new JPanel(new GridBagLayout());
+        add(optionsPane, BorderLayout.CENTER);
+        optionsPane.setBorder(new EmptyBorder(PADDING, PADDING, PADDING, PADDING));
 
-		setLayout(new GridBagLayout());
+        setLayout(new GridBagLayout());
 
-		int gridRow = 0;
+        int gridRow = 0;
 
         serverNameCombo = new JComboBox();
         initConnectionsHistoryCombo();
@@ -103,16 +103,19 @@ public class ConnectionView extends JPanel implements View {
         ++gridRow;
 
         if (this.hasSshSupport) {
-			gridRow = createSshOptions(optionsPane, gridRow);
-		}
+            gridRow = createSshOptions(optionsPane, gridRow);
+        }
 
         JPanel buttonPanel = createButtons();
 
-		GridBagConstraints cButtons = new GridBagConstraints();
-		cButtons.gridx = 0; cButtons.gridy = gridRow;
-		cButtons.weightx = 100; cButtons.weighty = 100;
-		cButtons.gridwidth = 2; cButtons.gridheight = 1;
-		optionsPane.add(buttonPanel, cButtons);
+        GridBagConstraints cButtons = new GridBagConstraints();
+        cButtons.gridx = 0;
+        cButtons.gridy = gridRow;
+        cButtons.weightx = 100;
+        cButtons.weighty = 100;
+        cButtons.gridwidth = 2;
+        cButtons.gridheight = 1;
+        optionsPane.add(buttonPanel, cButtons);
 
         view = new JFrame("New TightVNC Connection");
         view.add(this, BorderLayout.CENTER);
@@ -123,8 +126,8 @@ public class ConnectionView extends JPanel implements View {
         view.addWindowListener(appWindowListener);
 //        view.setResizable(false);
         Utils.decorateDialog(view);
-		Utils.centerWindow(view);
-	}
+        Utils.centerWindow(view);
+    }
 
     private void initConnectionsHistoryCombo() {
         serverNameCombo.setEditable(true);
@@ -138,21 +141,21 @@ public class ConnectionView extends JPanel implements View {
     }
 
     public void showReconnectDialog(final String title, final String message) {
-            JOptionPane reconnectPane = new JOptionPane(message + "\nTry another connection?",
-                    JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_OPTION);
-            final JDialog reconnectDialog = reconnectPane.createDialog(ConnectionView.this, title);
-            Utils.decorateDialog(reconnectDialog);
-            reconnectDialog.setVisible(true);
-            if (reconnectPane.getValue() == null ||
-                    (Integer)reconnectPane.getValue() == JOptionPane.NO_OPTION) {
-                presenter.setNeedReconnection(false);
-                closeView();
-                view.dispose();
-                closeApp();
-            } else {
-                // TODO return when allowInteractive, close window otherwise
+        JOptionPane reconnectPane = new JOptionPane(message + "\nTry another connection?",
+                JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_OPTION);
+        final JDialog reconnectDialog = reconnectPane.createDialog(ConnectionView.this, title);
+        Utils.decorateDialog(reconnectDialog);
+        reconnectDialog.setVisible(true);
+        if (reconnectPane.getValue() == null ||
+                (Integer) reconnectPane.getValue() == JOptionPane.NO_OPTION) {
+            presenter.setNeedReconnection(false);
+            closeView();
+            view.dispose();
+            closeApp();
+        } else {
+            // TODO return when allowInteractive, close window otherwise
 //                forceConnectionDialog = allowInteractive;
-            }
+        }
     }
 
     public void setConnectionInProgress(boolean enable) {
@@ -237,17 +240,20 @@ public class ConnectionView extends JPanel implements View {
         return buttonPanel;
     }
 
-	private int createSshOptions(JPanel pane, int gridRow) {
-		GridBagConstraints cUseSshTunnelLabel = new GridBagConstraints();
-		cUseSshTunnelLabel.gridx = 0; cUseSshTunnelLabel.gridy = gridRow;
-		cUseSshTunnelLabel.weightx = 100; cUseSshTunnelLabel.weighty = 100;
-		cUseSshTunnelLabel.gridwidth = 2; cUseSshTunnelLabel.gridheight = 1;
-		cUseSshTunnelLabel.anchor = GridBagConstraints.LINE_START;
-		cUseSshTunnelLabel.ipadx = PADDING;
-		cUseSshTunnelLabel.ipady = 10;
-		useSshTunnelingCheckbox = new JCheckBox("Use SSH tunneling");
-		pane.add(useSshTunnelingCheckbox, cUseSshTunnelLabel);
-		++gridRow;
+    private int createSshOptions(JPanel pane, int gridRow) {
+        GridBagConstraints cUseSshTunnelLabel = new GridBagConstraints();
+        cUseSshTunnelLabel.gridx = 0;
+        cUseSshTunnelLabel.gridy = gridRow;
+        cUseSshTunnelLabel.weightx = 100;
+        cUseSshTunnelLabel.weighty = 100;
+        cUseSshTunnelLabel.gridwidth = 2;
+        cUseSshTunnelLabel.gridheight = 1;
+        cUseSshTunnelLabel.anchor = GridBagConstraints.LINE_START;
+        cUseSshTunnelLabel.ipadx = PADDING;
+        cUseSshTunnelLabel.ipady = 10;
+        useSshTunnelingCheckbox = new JCheckBox("Use SSH tunneling");
+        pane.add(useSshTunnelingCheckbox, cUseSshTunnelLabel);
+        ++gridRow;
 
         sshHostLabel = new JLabel("SSH Server:");
         sshHostField = new JTextField(COLUMNS_HOST_FIELD);
@@ -278,11 +284,12 @@ public class ConnectionView extends JPanel implements View {
         });
 
         return gridRow;
-	}
+    }
 
     private void addFormFieldRow(JPanel pane, int gridRow, JLabel label, JComponent field, boolean fill) {
         GridBagConstraints cLabel = new GridBagConstraints();
-        cLabel.gridx = 0; cLabel.gridy = gridRow;
+        cLabel.gridx = 0;
+        cLabel.gridy = gridRow;
         cLabel.weightx = 0;
         cLabel.weighty = 100;
         cLabel.gridwidth = cLabel.gridheight = 1;
@@ -292,8 +299,10 @@ public class ConnectionView extends JPanel implements View {
         pane.add(label, cLabel);
 
         GridBagConstraints cField = new GridBagConstraints();
-        cField.gridx = 1; cField.gridy = gridRow;
-        cField.weightx = 0; cField.weighty = 100;
+        cField.gridx = 1;
+        cField.gridy = gridRow;
+        cField.weightx = 0;
+        cField.weighty = 100;
         cField.gridwidth = cField.gridheight = 1;
         cField.anchor = GridBagConstraints.LINE_START;
         if (fill) cField.fill = GridBagConstraints.HORIZONTAL;
@@ -328,7 +337,9 @@ public class ConnectionView extends JPanel implements View {
     public String getSshHostName() {
         if (hasSshSupport) {
             return sshHostField.getText();
-        } else { return ""; }
+        } else {
+            return "";
+        }
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -342,7 +353,9 @@ public class ConnectionView extends JPanel implements View {
     public String getSshPortNumber() {
         if (hasSshSupport) {
             return sshPortField.getText();
-        } else { return ""; }
+        } else {
+            return "";
+        }
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -356,7 +369,9 @@ public class ConnectionView extends JPanel implements View {
     public String getSshUserName() {
         if (hasSshSupport) {
             return sshUserField.getText();
-        } else { return ""; }
+        } else {
+            return "";
+        }
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -408,7 +423,7 @@ public class ConnectionView extends JPanel implements View {
         final JDialog errorDialog = errorPane.createDialog(view, "Connection error");
         Utils.decorateDialog(errorDialog);
         errorDialog.setVisible(true);
-        if ( ! presenter.allowInteractive()) {
+        if (!presenter.allowInteractive()) {
             presenter.cancelConnection();
             closeApp();
         }
@@ -448,16 +463,18 @@ class StatusBar extends JPanel {
                 Color oldColor = g.getColor();
                 g.translate(x, y);
                 g.setColor(c.getBackground().darker());
-                g.drawLine(0, 0, width -1, 0);
+                g.drawLine(0, 0, width - 1, 0);
                 g.setColor(c.getBackground().brighter());
-                g.drawLine(0, 1, width -1, 1);
+                g.drawLine(0, 1, width - 1, 1);
                 g.translate(-x, -y);
                 g.setColor(oldColor);
             }
+
             @Override
             public Insets getBorderInsets(Component c) {
                 return new Insets(2, 2, 2, 2);
             }
+
             @Override
             public boolean isBorderOpaque() {
                 return false;

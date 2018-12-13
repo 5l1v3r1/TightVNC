@@ -30,55 +30,56 @@ import com.glavsoft.rfb.protocol.auth.AuthHandler;
 
 public class AuthenticationState extends ProtocolState {
 
-	private static final int AUTH_RESULT_OK = 0;
-//	private static final int AUTH_RESULT_FAILED = 1;
+    private static final int AUTH_RESULT_OK = 0;
+    //	private static final int AUTH_RESULT_FAILED = 1;
 //	private static final int AUTH_RESULT_TOO_MANY = 2;
-	private final AuthHandler authHandler;
+    private final AuthHandler authHandler;
 
-	public AuthenticationState(ProtocolContext context,
-			AuthHandler authHandler) {
-		super(context);
-		this.authHandler = authHandler;
-	}
+    public AuthenticationState(ProtocolContext context,
+                               AuthHandler authHandler) {
+        super(context);
+        this.authHandler = authHandler;
+    }
 
-	@Override
-	public boolean next() throws UnsupportedProtocolVersionException, TransportException,
-			UnsupportedSecurityTypeException, AuthenticationFailedException, FatalException {
-		authenticate();
-		return true;
-	}
+    @Override
+    public boolean next() throws UnsupportedProtocolVersionException, TransportException,
+            UnsupportedSecurityTypeException, AuthenticationFailedException, FatalException {
+        authenticate();
+        return true;
+    }
 
-	private void authenticate() throws TransportException, AuthenticationFailedException,
-			FatalException, UnsupportedSecurityTypeException {
-		boolean isTight = authHandler.authenticate(reader, writer,
-				context.getSettings().authCapabilities, context.getPasswordRetriever());
-		// skip when protocol < 3.8 and NONE_AUTH
-		if (authHandler.useSecurityResult()) {
-			checkSecurityResult();
-		}
-		changeStateTo(isTight ? new InitTightState(context) : new InitState(context));
-		context.setTight(isTight);
-	}
+    private void authenticate() throws TransportException, AuthenticationFailedException,
+            FatalException, UnsupportedSecurityTypeException {
+        boolean isTight = authHandler.authenticate(reader, writer,
+                context.getSettings().authCapabilities, context.getPasswordRetriever());
+        // skip when protocol < 3.8 and NONE_AUTH
+        if (authHandler.useSecurityResult()) {
+            checkSecurityResult();
+        }
+        changeStateTo(isTight ? new InitTightState(context) : new InitState(context));
+        context.setTight(isTight);
+    }
 
-	/**
-	 * Check Security Result received from server
-	 * May be:
-	 * * 0 - OK
-	 * * 1 - Failed
-	 * @throws TransportException
-	 * @throws AuthenticationFailedException
-	 */
-	protected void checkSecurityResult() throws TransportException,
-	AuthenticationFailedException {
-		if (reader.readInt32() != AUTH_RESULT_OK) {
-			try {
-				String reason = reader.readString();
-				throw new AuthenticationFailedException(reason);
-			} catch (ClosedConnectionException e) {
-				// protocol version 3.3 and 3.7 does not send reason string,
-				// but silently closes the connection
-				throw new AuthenticationFailedException("Authentication failed");
-			}
-		}
-	}
+    /**
+     * Check Security Result received from server
+     * May be:
+     * * 0 - OK
+     * * 1 - Failed
+     *
+     * @throws TransportException
+     * @throws AuthenticationFailedException
+     */
+    protected void checkSecurityResult() throws TransportException,
+            AuthenticationFailedException {
+        if (reader.readInt32() != AUTH_RESULT_OK) {
+            try {
+                String reason = reader.readString();
+                throw new AuthenticationFailedException(reason);
+            } catch (ClosedConnectionException e) {
+                // protocol version 3.3 and 3.7 does not send reason string,
+                // but silently closes the connection
+                throw new AuthenticationFailedException("Authentication failed");
+            }
+        }
+    }
 }

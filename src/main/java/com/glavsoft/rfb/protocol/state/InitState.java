@@ -24,11 +24,7 @@
 
 package com.glavsoft.rfb.protocol.state;
 
-import com.glavsoft.exceptions.AuthenticationFailedException;
-import com.glavsoft.exceptions.FatalException;
-import com.glavsoft.exceptions.TransportException;
-import com.glavsoft.exceptions.UnsupportedProtocolVersionException;
-import com.glavsoft.exceptions.UnsupportedSecurityTypeException;
+import com.glavsoft.exceptions.*;
 import com.glavsoft.rfb.encoding.ServerInitMessage;
 import com.glavsoft.rfb.protocol.ProtocolContext;
 import com.glavsoft.rfb.protocol.ProtocolSettings;
@@ -37,57 +33,57 @@ import java.util.logging.Logger;
 
 /**
  * ClientInit
- *
+ * <p>
  * Once the client and server are sure that they're happy to talk to one
  * another, the client sends an initialisation message.  At present this
  * message onl@!,@!,y consists of a boolean indicating whether the server should try
  * to share the desktop by leaving other clients connected, or give exclusive
  * access to this client by disconnecting all other clients.
- *
+ * <p>
  * 1 - U8 - shared-ﬂag
- *
+ * <p>
  * Shared-ﬂag is non-zero (true) if the server should try to share the desktop by leaving
  * other clients connected, zero (false) if it should give exclusive access to this client by
  * disconnecting all other clients.
- *
+ * <p>
  * ServerInit
- *
+ * <p>
  * After receiving the ClientInit message, the server sends a ServerInit message. This
  * tells the client the width and height of the server’s framebuffer, its pixel format and the
  * name associated with the desktop.
  */
 public class InitState extends ProtocolState {
 
-	public InitState(ProtocolContext context) {
-		super(context);
-	}
+    public InitState(ProtocolContext context) {
+        super(context);
+    }
 
-	@Override
-	public boolean next() throws UnsupportedProtocolVersionException, TransportException,
-			UnsupportedSecurityTypeException, AuthenticationFailedException, FatalException {
-		clientAndServerInit();
-		return false;
-	}
+    @Override
+    public boolean next() throws UnsupportedProtocolVersionException, TransportException,
+            UnsupportedSecurityTypeException, AuthenticationFailedException, FatalException {
+        clientAndServerInit();
+        return false;
+    }
 
-	protected void clientAndServerInit() throws TransportException {
-		ServerInitMessage serverInitMessage = getServerInitMessage();
-		ProtocolSettings settings = context.getSettings();
-		settings.enableAllEncodingCaps();
-		completeContextData(serverInitMessage);
-	}
+    protected void clientAndServerInit() throws TransportException {
+        ServerInitMessage serverInitMessage = getServerInitMessage();
+        ProtocolSettings settings = context.getSettings();
+        settings.enableAllEncodingCaps();
+        completeContextData(serverInitMessage);
+    }
 
-	protected void completeContextData(ServerInitMessage serverInitMessage) {
-		context.setPixelFormat(serverInitMessage.getPixelFormat());
-		context.setFbWidth(serverInitMessage.getFrameBufferWidth());
-		context.setFbHeight(serverInitMessage.getFrameBufferHeight());
-		context.setRemoteDesktopName(serverInitMessage.getName());
+    protected void completeContextData(ServerInitMessage serverInitMessage) {
+        context.setPixelFormat(serverInitMessage.getPixelFormat());
+        context.setFbWidth(serverInitMessage.getFrameBufferWidth());
+        context.setFbHeight(serverInitMessage.getFrameBufferHeight());
+        context.setRemoteDesktopName(serverInitMessage.getName());
         Logger.getLogger(getClass().getName()).fine(serverInitMessage.toString());
-	}
+    }
 
-	protected ServerInitMessage getServerInitMessage() throws TransportException {
-		writer.write(context.getSettings().getSharedFlag());
+    protected ServerInitMessage getServerInitMessage() throws TransportException {
+        writer.write(context.getSettings().getSharedFlag());
         return new ServerInitMessage(reader);
-	}
+    }
 
 
 }

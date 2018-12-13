@@ -37,29 +37,29 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Logger;
 
 /**
-* @author dime at tightvnc.com
-*/
+ * @author dime at tightvnc.com
+ */
 class SwingSshUserInfo implements UserInfo, UIKeyboardInteractive {
-	private String password;
+    private String password;
     private String passphrase;
-	private final JFrame parentFrame;
+    private final JFrame parentFrame;
 
     SwingSshUserInfo(JFrame parentFrame) {
-		this.parentFrame = parentFrame;
+        this.parentFrame = parentFrame;
     }
 
-	@Override
-	public String getPassphrase() {
-		return passphrase;
-	}
+    @Override
+    public String getPassphrase() {
+        return passphrase;
+    }
 
-	@Override
-	public String getPassword() {
-		return password;
-	}
+    @Override
+    public String getPassword() {
+        return password;
+    }
 
-	@Override
-	public boolean promptPassword(final String message) {
+    @Override
+    public boolean promptPassword(final String message) {
         final int[] result = new int[1];
         try {
             SwingUtilities.invokeAndWait(new Runnable() {
@@ -77,7 +77,7 @@ class SwingSshUserInfo implements UserInfo, UIKeyboardInteractive {
                         }
                     });
                     dialog.setVisible(true);
-                    result[0] = pane.getValue() != null ? (Integer)pane.getValue() : JOptionPane.CLOSED_OPTION;
+                    result[0] = pane.getValue() != null ? (Integer) pane.getValue() : JOptionPane.CLOSED_OPTION;
                     if (JOptionPane.OK_OPTION == result[0]) {
                         password = passwordField.getText();
                     }
@@ -91,10 +91,10 @@ class SwingSshUserInfo implements UserInfo, UIKeyboardInteractive {
         }
 
         return JOptionPane.OK_OPTION == result[0];
-	}
+    }
 
-	@Override
-	public boolean promptPassphrase(final String message) {
+    @Override
+    public boolean promptPassphrase(final String message) {
         final int[] result = new int[1];
         try {
             SwingUtilities.invokeAndWait(new Runnable() {
@@ -107,24 +107,24 @@ class SwingSshUserInfo implements UserInfo, UIKeyboardInteractive {
                     final JDialog dialog = pane.createDialog(parentFrame, "SSH Authentication");
                     Utils.decorateDialog(dialog);
                     dialog.setVisible(true);
-                    result[0] = pane.getValue() != null ? (Integer)pane.getValue() : JOptionPane.CLOSED_OPTION;
+                    result[0] = pane.getValue() != null ? (Integer) pane.getValue() : JOptionPane.CLOSED_OPTION;
                     if (JOptionPane.OK_OPTION == result[0]) {
                         passphrase = passphraseField.getText();
                     }
                     dialog.dispose();
                 }
             });
-        }  catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             getLogger().severe(e.getMessage());
         } catch (InvocationTargetException e) {
             getLogger().severe(e.getMessage());
         }
         return JOptionPane.OK_OPTION == result[0];
-	}
+    }
 
-	@Override
-	public boolean promptYesNo(final String message) {
-		final int[] result = new int[1];
+    @Override
+    public boolean promptYesNo(final String message) {
+        final int[] result = new int[1];
         try {
             SwingUtilities.invokeAndWait(new Runnable() {
                 @Override
@@ -133,21 +133,21 @@ class SwingSshUserInfo implements UserInfo, UIKeyboardInteractive {
                     final JDialog dialog = pane.createDialog(parentFrame, "SSH: Warning");
                     Utils.decorateDialog(dialog);
                     dialog.setVisible(true);
-                    result[0] = pane.getValue() != null ? (Integer)pane.getValue() : JOptionPane.CLOSED_OPTION;
+                    result[0] = pane.getValue() != null ? (Integer) pane.getValue() : JOptionPane.CLOSED_OPTION;
                     dialog.dispose();
                 }
             });
-        }  catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             getLogger().severe(e.getMessage());
         } catch (InvocationTargetException e) {
             getLogger().severe(e.getMessage());
         }
         return JOptionPane.YES_OPTION == result[0];
-	}
+    }
 
-	@Override
-	public void showMessage(final String message) {
-		try {
+    @Override
+    public void showMessage(final String message) {
+        try {
             SwingUtilities.invokeAndWait(new Runnable() {
                 @Override
                 public void run() {
@@ -158,19 +158,19 @@ class SwingSshUserInfo implements UserInfo, UIKeyboardInteractive {
                     dialog.dispose();
                 }
             });
-        }  catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             getLogger().severe(e.getMessage());
         } catch (InvocationTargetException e) {
             getLogger().severe(e.getMessage());
         }
-	}
+    }
 
-	@Override
-	public String[] promptKeyboardInteractive(final String destination,
-			final String name,
-			final String instruction,
-			final String[] prompt,
-			final boolean[] echo) {
+    @Override
+    public String[] promptKeyboardInteractive(final String destination,
+                                              final String name,
+                                              final String instruction,
+                                              final String[] prompt,
+                                              final boolean[] echo) {
         class WrapRes {
             String[] stringsRes;
         }
@@ -217,7 +217,7 @@ class SwingSshUserInfo implements UserInfo, UIKeyboardInteractive {
                     final JDialog dialog = pane.createDialog(parentFrame, title);
                     Utils.decorateDialog(dialog);
                     dialog.setVisible(true);
-                    int result = pane.getValue() != null ? (Integer)pane.getValue() : JOptionPane.CLOSED_OPTION;
+                    int result = pane.getValue() != null ? (Integer) pane.getValue() : JOptionPane.CLOSED_OPTION;
                     wrapRes.stringsRes = null;
                     if (JOptionPane.OK_OPTION == result) {
                         wrapRes.stringsRes = new String[prompt.length];
@@ -233,8 +233,8 @@ class SwingSshUserInfo implements UserInfo, UIKeyboardInteractive {
         } catch (InvocationTargetException e) {
             getLogger().severe(e.getMessage());
         }
-		return wrapRes.stringsRes;
-	}
+        return wrapRes.stringsRes;
+    }
 
     private Logger getLogger() {
         return Logger.getLogger(getClass().getName());

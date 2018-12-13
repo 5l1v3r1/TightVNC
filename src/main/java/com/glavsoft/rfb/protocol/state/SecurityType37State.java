@@ -30,14 +30,14 @@ import com.glavsoft.rfb.protocol.auth.SecurityType;
 
 public class SecurityType37State extends SecurityTypeState {
 
-	public SecurityType37State(ProtocolContext context) {
-		super(context);
-	}
+    public SecurityType37State(ProtocolContext context) {
+        super(context);
+    }
 
-	@Override
-	protected void setUseSecurityResult(AuthHandler type) {
-		if (SecurityType.NONE_AUTHENTICATION == type.getType()) {
-			type.setUseSecurityResult(false);
-		}
-	}
+    @Override
+    protected void setUseSecurityResult(AuthHandler type) {
+        if (SecurityType.NONE_AUTHENTICATION == type.getType()) {
+            type.setUseSecurityResult(false);
+        }
+    }
 }

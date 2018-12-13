@@ -31,42 +31,46 @@ import com.glavsoft.rfb.protocol.state.ProtocolState;
 import com.glavsoft.transport.Reader;
 import com.glavsoft.transport.Writer;
 
-import java.util.logging.Logger;
-
 public interface ProtocolContext {
 
-	void changeStateTo(ProtocolState state);
+    void changeStateTo(ProtocolState state);
 
-	IPasswordRetriever getPasswordRetriever();
+    IPasswordRetriever getPasswordRetriever();
 
-	ProtocolSettings getSettings();
+    ProtocolSettings getSettings();
 
     Writer getWriter();
-	Reader getReader();
 
-	int getFbWidth();
-	void setFbWidth(int frameBufferWidth);
+    Reader getReader();
 
-	int getFbHeight();
-	void setFbHeight(int frameBufferHeight);
+    int getFbWidth();
 
-	PixelFormat getPixelFormat();
-	void setPixelFormat(PixelFormat pixelFormat);
+    void setFbWidth(int frameBufferWidth);
 
-	void setRemoteDesktopName(String name);
+    int getFbHeight();
 
-	void sendMessage(ClientToServerMessage message);
+    void setFbHeight(int frameBufferHeight);
 
-	String getRemoteDesktopName();
+    PixelFormat getPixelFormat();
 
-	void sendRefreshMessage();
-	
-	void cleanUpSession(String message);
+    void setPixelFormat(PixelFormat pixelFormat);
+
+    void setRemoteDesktopName(String name);
+
+    void sendMessage(ClientToServerMessage message);
+
+    String getRemoteDesktopName();
+
+    void sendRefreshMessage();
+
+    void cleanUpSession(String message);
 
     void setTight(boolean isTight);
-	boolean isTight();
+
+    boolean isTight();
 
     void setProtocolVersion(String protocolVersion);
+
     String getProtocolVersion();
 
 }

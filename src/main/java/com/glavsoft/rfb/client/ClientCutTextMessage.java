@@ -39,23 +39,24 @@ import com.glavsoft.transport.Writer;
  * length - U8 array - text
  */
 public class ClientCutTextMessage implements ClientToServerMessage {
-	private final byte [] bytes;
+    private final byte[] bytes;
 
-	public ClientCutTextMessage(byte[] bytes) {
-		this.bytes = bytes;
-	}
+    public ClientCutTextMessage(byte[] bytes) {
+        this.bytes = bytes;
+    }
 
-	@Override
-	public void send(Writer writer) throws TransportException {
-		writer.write(CLIENT_CUT_TEXT);
-		writer.writeByte(0); writer.writeInt16(0); // padding
-		writer.write(bytes.length);
-		writer.write(bytes); // TODO: [dime] convert 'text' String to byte arrya using right charset
-		writer.flush();
-	}
+    @Override
+    public void send(Writer writer) throws TransportException {
+        writer.write(CLIENT_CUT_TEXT);
+        writer.writeByte(0);
+        writer.writeInt16(0); // padding
+        writer.write(bytes.length);
+        writer.write(bytes); // TODO: [dime] convert 'text' String to byte arrya using right charset
+        writer.flush();
+    }
 
-	@Override
-	public String toString() {
-		return "ClientCutTextMessage: [length: " + bytes.length +", text: ...]";
-	}
+    @Override
+    public String toString() {
+        return "ClientCutTextMessage: [length: " + bytes.length + ", text: ...]";
+    }
 }

@@ -28,7 +28,6 @@ import com.glavsoft.utils.Strings;
 import com.glavsoft.viewer.CancelConnectionException;
 import com.glavsoft.viewer.swing.ConnectionParams;
 import com.glavsoft.viewer.swing.Utils;
-
 import com.jcraft.jsch.*;
 
 import javax.swing.*;
@@ -46,21 +45,21 @@ public class SshConnectionManager implements SshKnownHostsManager {
     public static final String KNOWN_HOSTS = "known_hosts";
     private Session session;
     private String errorMessage = "";
-	private final JFrame parentWindow;
+    private final JFrame parentWindow;
     private JSch jsch;
 
     public SshConnectionManager(JFrame parentWindow) {
         this.parentWindow = parentWindow;
-	}
+    }
 
-	public int connect(ConnectionParams connectionParams) throws CancelConnectionException {
+    public int connect(ConnectionParams connectionParams) throws CancelConnectionException {
         if (Strings.isTrimmedEmpty(connectionParams.sshUserName)) {
             connectionParams.sshUserName = getInteractivelySshUserName();
         }
 
         if (session != null && session.isConnected()) {
-			session.disconnect();
-		}
+            session.disconnect();
+        }
         jsch = new JSch();
         try {
             jsch.setKnownHosts(getKnownHostsStream());
@@ -68,20 +67,20 @@ public class SshConnectionManager implements SshKnownHostsManager {
             Logger.getLogger(this.getClass().getName()).severe("Cannot set JSCH known hosts: " + e.getMessage());
         }
         int port = 0;
-		try {
-			session = jsch.getSession(
+        try {
+            session = jsch.getSession(
                     connectionParams.sshUserName, connectionParams.sshHostName, connectionParams.getSshPortNumber());
-			UserInfo ui = new SwingSshUserInfo(parentWindow);
-			session.setUserInfo(ui);
-			session.connect();
+            UserInfo ui = new SwingSshUserInfo(parentWindow);
+            session.setUserInfo(ui);
+            session.connect();
             sync();
-			port = session.setPortForwardingL(0, connectionParams.hostName, connectionParams.getPortNumber());
+            port = session.setPortForwardingL(0, connectionParams.hostName, connectionParams.getPortNumber());
         } catch (JSchException e) {
             session.disconnect();
-			errorMessage = e.getMessage();
-		}
-		return port;
-	}
+            errorMessage = e.getMessage();
+        }
+        return port;
+    }
 
     private String getInteractivelySshUserName() throws CancelConnectionException {
         class Pair {
@@ -116,12 +115,12 @@ public class SshConnectionManager implements SshKnownHostsManager {
     }
 
     public boolean isConnected() {
-		return session.isConnected();
-	}
+        return session.isConnected();
+    }
 
-	public String getErrorMessage() {
-		return errorMessage;
-	}
+    public String getErrorMessage() {
+        return errorMessage;
+    }
 
     private InputStream getKnownHostsStream() {
         Preferences sshNode = Preferences.userRoot().node(SSH_NODE);
@@ -137,18 +136,18 @@ public class SshConnectionManager implements SshKnownHostsManager {
             if (null == hostKey) return;
             for (HostKey hk : hostKey) {
                 String host = hk.getHost();
-                    String type = hk.getType();
-                    if (type.equals("UNKNOWN")) {
-                        write(out, host);
-                        write(out, "\n");
-                        continue;
-                    }
+                String type = hk.getType();
+                if (type.equals("UNKNOWN")) {
                     write(out, host);
-                    write(out, " ");
-                    write(out, type);
-                    write(out, " ");
-                    write(out, hk.getKey());
                     write(out, "\n");
+                    continue;
+                }
+                write(out, host);
+                write(out, " ");
+                write(out, type);
+                write(out, " ");
+                write(out, hk.getKey());
+                write(out, "\n");
             }
         } catch (IOException e) {
             Logger.getLogger(this.getClass().getName()).severe("Cannot sync JSCH known hosts: " + e.getMessage());

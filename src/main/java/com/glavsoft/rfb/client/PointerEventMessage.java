@@ -28,29 +28,29 @@ import com.glavsoft.exceptions.TransportException;
 import com.glavsoft.transport.Writer;
 
 public class PointerEventMessage implements ClientToServerMessage {
-	private final byte buttonMask;
-	private final short x;
-	private final short y;
+    private final byte buttonMask;
+    private final short x;
+    private final short y;
 
-	public PointerEventMessage(byte buttonMask, short x, short y) {
-		this.buttonMask = buttonMask;
-		this.x = x;
-		this.y = y;
-	}
+    public PointerEventMessage(byte buttonMask, short x, short y) {
+        this.buttonMask = buttonMask;
+        this.x = x;
+        this.y = y;
+    }
 
-	@Override
-	public void send(Writer writer) throws TransportException {
-		writer.writeByte(POINTER_EVENT);
-		writer.writeByte(buttonMask);
-		writer.writeInt16(x);
-		writer.writeInt16(y);
-		writer.flush();
-	}
+    @Override
+    public void send(Writer writer) throws TransportException {
+        writer.writeByte(POINTER_EVENT);
+        writer.writeByte(buttonMask);
+        writer.writeInt16(x);
+        writer.writeInt16(y);
+        writer.flush();
+    }
 
-	@Override
-	public String toString() {
-		return "PointerEventMessage: [x: "+ x +", y: "+ y + ", button-mask: " +
-		buttonMask +"]";
-	}
+    @Override
+    public String toString() {
+        return "PointerEventMessage: [x: " + x + ", y: " + y + ", button-mask: " +
+                buttonMask + "]";
+    }
 
 }

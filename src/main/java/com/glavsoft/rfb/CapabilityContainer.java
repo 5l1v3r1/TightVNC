@@ -24,84 +24,85 @@
 
 package com.glavsoft.rfb;
 
+import com.glavsoft.exceptions.TransportException;
+import com.glavsoft.rfb.encoding.EncodingType;
+import com.glavsoft.transport.Reader;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import com.glavsoft.exceptions.TransportException;
-import com.glavsoft.rfb.encoding.EncodingType;
-import com.glavsoft.transport.Reader;
-
 /**
  * Container for Tight extention protocol capabilities
- *
+ * <p>
  * Needed to set what capabilities we support, which of them supported
  * by server and for enabling/disabling ops on them.
  */
 public class CapabilityContainer {
-	public CapabilityContainer() { }
+    public CapabilityContainer() {
+    }
 
-	private final Map<Integer, RfbCapabilityInfo> caps = new HashMap<Integer, RfbCapabilityInfo>();
+    private final Map<Integer, RfbCapabilityInfo> caps = new HashMap<Integer, RfbCapabilityInfo>();
 
-	public void add(RfbCapabilityInfo capabilityInfo) {
-		caps.put(capabilityInfo.getCode(), capabilityInfo);
-	}
+    public void add(RfbCapabilityInfo capabilityInfo) {
+        caps.put(capabilityInfo.getCode(), capabilityInfo);
+    }
 
-	public void add(int code, String vendor, String name) {
-		caps.put(code, new RfbCapabilityInfo(code, vendor, name));
-	}
+    public void add(int code, String vendor, String name) {
+        caps.put(code, new RfbCapabilityInfo(code, vendor, name));
+    }
 
-	public void addEnabled(int code, String vendor, String name) {
-		RfbCapabilityInfo capability = new RfbCapabilityInfo(code, vendor, name);
-		capability.setEnable(true);
-		caps.put(code, capability);
-	}
+    public void addEnabled(int code, String vendor, String name) {
+        RfbCapabilityInfo capability = new RfbCapabilityInfo(code, vendor, name);
+        capability.setEnable(true);
+        caps.put(code, capability);
+    }
 
-	public void setEnable(int id, boolean enable) {
-		RfbCapabilityInfo c = caps.get(id);
-		if (c != null) {
-			c.setEnable(enable);
-		}
-	}
+    public void setEnable(int id, boolean enable) {
+        RfbCapabilityInfo c = caps.get(id);
+        if (c != null) {
+            c.setEnable(enable);
+        }
+    }
 
-	public void setAllEnable(boolean enable) {
-		for (RfbCapabilityInfo c : caps.values()) {
-			c.setEnable(enable);
-		}
-	}
+    public void setAllEnable(boolean enable) {
+        for (RfbCapabilityInfo c : caps.values()) {
+            c.setEnable(enable);
+        }
+    }
 
-	public Collection<EncodingType> getEnabledEncodingTypes() {
-		Collection<EncodingType> types = new LinkedList<EncodingType>();
-		for (RfbCapabilityInfo c : caps.values()) {
-			if (c.isEnabled()) {
-				types.add(EncodingType.byId(c.getCode()));
-			}
-		}
-		return types;
-	}
+    public Collection<EncodingType> getEnabledEncodingTypes() {
+        Collection<EncodingType> types = new LinkedList<EncodingType>();
+        for (RfbCapabilityInfo c : caps.values()) {
+            if (c.isEnabled()) {
+                types.add(EncodingType.byId(c.getCode()));
+            }
+        }
+        return types;
+    }
 
-	public void read(Reader reader, int count) throws TransportException {
-		while (count-- > 0) {
-			RfbCapabilityInfo capInfoReceived = new RfbCapabilityInfo(reader);
-			Logger.getLogger("com.glavsoft.rfb").fine(capInfoReceived.toString());
-			RfbCapabilityInfo myCapInfo = caps.get(capInfoReceived.getCode());
-			if (myCapInfo != null) {
-				myCapInfo.setEnable(true);
-			}
-		}
-	}
+    public void read(Reader reader, int count) throws TransportException {
+        while (count-- > 0) {
+            RfbCapabilityInfo capInfoReceived = new RfbCapabilityInfo(reader);
+            Logger.getLogger("com.glavsoft.rfb").fine(capInfoReceived.toString());
+            RfbCapabilityInfo myCapInfo = caps.get(capInfoReceived.getCode());
+            if (myCapInfo != null) {
+                myCapInfo.setEnable(true);
+            }
+        }
+    }
 
-	public boolean isSupported(int code) {
-		RfbCapabilityInfo myCapInfo = caps.get(code);
-		if (myCapInfo != null)
-			return myCapInfo.isEnabled();
-		return false;
-	}
+    public boolean isSupported(int code) {
+        RfbCapabilityInfo myCapInfo = caps.get(code);
+        if (myCapInfo != null)
+            return myCapInfo.isEnabled();
+        return false;
+    }
 
-	public boolean isSupported(RfbCapabilityInfo rfbCapabilityInfo) {
-		return isSupported(rfbCapabilityInfo.getCode());
-	}
+    public boolean isSupported(RfbCapabilityInfo rfbCapabilityInfo) {
+        return isSupported(rfbCapabilityInfo.getCode());
+    }
 
 }

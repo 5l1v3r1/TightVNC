@@ -24,7 +24,10 @@
 
 package com.glavsoft.viewer.swing;
 
-import com.glavsoft.viewer.*;
+import com.glavsoft.viewer.CancelConnectionException;
+import com.glavsoft.viewer.ConnectionErrorException;
+import com.glavsoft.viewer.ConnectionPresenter;
+import com.glavsoft.viewer.NetworkConnectionWorker;
 import com.glavsoft.viewer.swing.ssh.SshConnectionManager;
 
 import javax.swing.*;
@@ -55,7 +58,7 @@ public class SwingNetworkConnectionWorker extends SwingWorker<Socket, String> im
 
     @Override
     public Socket doInBackground() throws Exception {
-        String s = "<b>" +connectionParams.hostName + "</b>:" + connectionParams.getPortNumber();
+        String s = "<b>" + connectionParams.hostName + "</b>:" + connectionParams.getPortNumber();
         if (connectionParams.useSsh()) {
             s += " <i>(via ssh://" + connectionParams.sshUserName + "@" + connectionParams.sshHostName + ":" + connectionParams.getSshPortNumber() + ")</i>";
         }
@@ -71,7 +74,7 @@ public class SwingNetworkConnectionWorker extends SwingWorker<Socket, String> im
             logger.info(message);
             publish(message);
             port = sshConnectionManager.connect(connectionParams);
-            if (sshConnectionManager.isConnected() ) {
+            if (sshConnectionManager.isConnected()) {
                 host = "127.0.0.1";
                 message = "SSH tunnel established: " + host + ":" + port;
                 logger.info(message);
@@ -93,7 +96,7 @@ public class SwingNetworkConnectionWorker extends SwingWorker<Socket, String> im
 
     private String formatHostString(String hostName) {
         if (hostName.length() <= MAX_HOSTNAME_LENGTH_FOR_MESSAGES) {
-            return  hostName;
+            return hostName;
         } else {
             return hostName.substring(0, MAX_HOSTNAME_LENGTH_FOR_MESSAGES) + "...";
         }
@@ -146,7 +149,7 @@ public class SwingNetworkConnectionWorker extends SwingWorker<Socket, String> im
                 logger.severe(cee.getMessage() + " host: " +
                         connectionParams.hostName + ":" + connectionParams.getPortNumber());
                 errorMessage = cee.getMessage() + "\nHost: " +
-                    formatHostString(connectionParams.hostName) + ":" + connectionParams.getPortNumber();
+                        formatHostString(connectionParams.hostName) + ":" + connectionParams.getPortNumber();
             } catch (Throwable throwable) {
                 logger.log(Level.FINEST, "Couldn't connect to '" + formatHostString(connectionParams.hostName) +
                         ":" + connectionParams.getPortNumber() + "':\n" + throwable.getMessage(), throwable);

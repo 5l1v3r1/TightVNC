@@ -34,25 +34,26 @@ import java.util.concurrent.TimeUnit;
  * @author dime at tightvnc.com
  */
 public class MessageQueue {
-	private final BlockingQueue<ClientToServerMessage> queue;
+    private final BlockingQueue<ClientToServerMessage> queue;
 
-	public MessageQueue() {
-		queue = new LinkedBlockingQueue<ClientToServerMessage>();
-	}
+    public MessageQueue() {
+        queue = new LinkedBlockingQueue<ClientToServerMessage>();
+    }
 
-	public void put(ClientToServerMessage message) {
-		queue.offer(message);
-	}
+    public void put(ClientToServerMessage message) {
+        queue.offer(message);
+    }
 
     /**
      * Retrieves and removes the head of this queue, waiting if necessary until an element becomes available.
      * Retrieves and removes the head of this queue, waiting up to the certain wait time if necessary for
      * an element to become available.
+     *
      * @return the head of this queue, or null if the specified waiting time elapses before an element is available
      * @throws InterruptedException - if interrupted while waiting
      */
-	public ClientToServerMessage get() throws InterruptedException {
-		return queue.poll(1, TimeUnit.SECONDS);
-	}
+    public ClientToServerMessage get() throws InterruptedException {
+        return queue.poll(1, TimeUnit.SECONDS);
+    }
 
 }

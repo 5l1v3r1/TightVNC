@@ -29,5 +29,6 @@ package com.glavsoft.viewer.mvp;
  */
 public interface View {
     void showView();
+
     void closeView();
 }

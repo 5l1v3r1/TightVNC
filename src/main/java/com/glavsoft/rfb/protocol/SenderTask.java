@@ -34,58 +34,59 @@ import java.util.logging.Logger;
 
 public class SenderTask implements Runnable {
 
-	private final MessageQueue queue;
-	private final Writer writer;
-	private final ProtocolContext protocolContext;
-	private volatile boolean isRunning = false;
+    private final MessageQueue queue;
+    private final Writer writer;
+    private final ProtocolContext protocolContext;
+    private volatile boolean isRunning = false;
 
-	/**
-	 * Create sender task
-	 * Task runs as thread, receive messages from queue and sends them to writer.
-	 * When no messages appears in queue longer than timeout period, sends FramebufferUpdate
-	 * request
-	 * @param messageQueue queue to poll messages
-	 * @param writer writer to send messages out
-	 * @param protocolContext protocol
-	 */
-	public SenderTask(MessageQueue messageQueue, Writer writer, ProtocolContext protocolContext) {
-		this.queue = messageQueue;
-		this.writer = writer;
-		this.protocolContext = protocolContext;
-	}
+    /**
+     * Create sender task
+     * Task runs as thread, receive messages from queue and sends them to writer.
+     * When no messages appears in queue longer than timeout period, sends FramebufferUpdate
+     * request
+     *
+     * @param messageQueue    queue to poll messages
+     * @param writer          writer to send messages out
+     * @param protocolContext protocol
+     */
+    public SenderTask(MessageQueue messageQueue, Writer writer, ProtocolContext protocolContext) {
+        this.queue = messageQueue;
+        this.writer = writer;
+        this.protocolContext = protocolContext;
+    }
 
-	@Override
-	public void run() {
-		isRunning = true;
-		while (isRunning) {
-			ClientToServerMessage message;
-			try {
-				message = queue.get();
-				if (message != null) {
-					message.send(writer);
-				}
-			} catch (InterruptedException e) {
-				// nop
-			} catch (TransportException e) {
-				Logger.getLogger(getClass().getName()).severe("Close session: " + e.getMessage());
-				if (isRunning) {
-					protocolContext.cleanUpSession("Connection closed");
-				}
-				stopTask();
-			} catch (Throwable te) {
-				StringWriter sw = new StringWriter();
-				PrintWriter pw = new PrintWriter(sw);
-				te.printStackTrace(pw);
-				if (isRunning) {
-					protocolContext.cleanUpSession(te.getMessage() + "\n" + sw.toString());
-				}
-				stopTask();
-			}
-		}
-	}
+    @Override
+    public void run() {
+        isRunning = true;
+        while (isRunning) {
+            ClientToServerMessage message;
+            try {
+                message = queue.get();
+                if (message != null) {
+                    message.send(writer);
+                }
+            } catch (InterruptedException e) {
+                // nop
+            } catch (TransportException e) {
+                Logger.getLogger(getClass().getName()).severe("Close session: " + e.getMessage());
+                if (isRunning) {
+                    protocolContext.cleanUpSession("Connection closed");
+                }
+                stopTask();
+            } catch (Throwable te) {
+                StringWriter sw = new StringWriter();
+                PrintWriter pw = new PrintWriter(sw);
+                te.printStackTrace(pw);
+                if (isRunning) {
+                    protocolContext.cleanUpSession(te.getMessage() + "\n" + sw.toString());
+                }
+                stopTask();
+            }
+        }
+    }
 
-	public void stopTask() {
-		isRunning = false;
-	}
+    public void stopTask() {
+        isRunning = false;
+    }
 
 }

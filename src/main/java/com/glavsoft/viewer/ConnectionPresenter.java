@@ -72,7 +72,7 @@ public class ConnectionPresenter extends Presenter {
             throws IllegalStateException {
         this.rfbSettings = rfbSettings;
         this.uiSettings = uiSettings;
-        if ( ! isModelRegisteredByName(CONNECTION_PARAMS_MODEL)) {
+        if (!isModelRegisteredByName(CONNECTION_PARAMS_MODEL)) {
             throw new IllegalStateException("No Connection Params model added.");
         }
         connectionsHistory = new ConnectionsHistory();
@@ -193,9 +193,9 @@ public class ConnectionPresenter extends Presenter {
     }
 
     private void setSshOptions() {
-		if (hasSshSupport) {
+        if (hasSshSupport) {
             try {
-                final boolean useSsh = (Boolean)getViewProperty(PROPERTY_USE_SSH);
+                final boolean useSsh = (Boolean) getViewProperty(PROPERTY_USE_SSH);
                 setModelProperty(PROPERTY_USE_SSH, useSsh, boolean.class);
             } catch (PropertyNotFoundException e) {
                 //nop
@@ -205,7 +205,7 @@ public class ConnectionPresenter extends Presenter {
             setModelProperty(PROPERTY_SSH_PORT_NUMBER, getViewPropertyOrNull(PROPERTY_SSH_PORT_NUMBER));
             setViewProperty(PROPERTY_SSH_PORT_NUMBER, getModelProperty(PROPERTY_SSH_PORT_NUMBER));
         }
-	}
+    }
 
     private void syncModels(int paramSettingsMask) {
         final ConnectionParams cp = (ConnectionParams) getModel(CONNECTION_PARAMS_MODEL);
@@ -213,7 +213,7 @@ public class ConnectionPresenter extends Presenter {
         cp.completeEmptyFieldsFrom(mostSuitableConnection);
         rfbSettings.copyDataFrom(connectionsHistory.getProtocolSettings(mostSuitableConnection), paramSettingsMask & 0xffff);
         uiSettings.copyDataFrom(connectionsHistory.getUiSettingsData(mostSuitableConnection), (paramSettingsMask >> 16) & 0xffff);
-        if ( ! cp.isHostNameEmpty()) {
+        if (!cp.isHostNameEmpty()) {
             connectionsHistory.reorder(cp, rfbSettings, uiSettings);
         }
 

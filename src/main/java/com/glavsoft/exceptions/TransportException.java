@@ -27,11 +27,12 @@ package com.glavsoft.exceptions;
 
 @SuppressWarnings("serial")
 public class TransportException extends CommonException {
-	public TransportException(String message, Throwable exception) {
-		super(message, exception);
-	}
-	public TransportException(Throwable exception) {
-		super(exception);
-	}
+    public TransportException(String message, Throwable exception) {
+        super(message, exception);
+    }
+
+    public TransportException(Throwable exception) {
+        super(exception);
+    }
 
 }

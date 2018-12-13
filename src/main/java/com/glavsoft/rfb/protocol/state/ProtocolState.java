@@ -30,31 +30,31 @@ import com.glavsoft.transport.Reader;
 import com.glavsoft.transport.Writer;
 
 abstract public class ProtocolState {
-	protected ProtocolContext context;
-	protected Reader reader;
-	protected Writer writer;
+    protected ProtocolContext context;
+    protected Reader reader;
+    protected Writer writer;
 
-	public ProtocolState(ProtocolContext context) {
-		this.context = context;
-		this.reader = context.getReader();
-		this.writer = context.getWriter();
-	}
+    public ProtocolState(ProtocolContext context) {
+        this.context = context;
+        this.reader = context.getReader();
+        this.writer = context.getWriter();
+    }
 
-	/**
-	 * Change state of finite machine.
-	 *
-	 * @param state state, the Finite Machine will switched to
-	 */
-	protected void changeStateTo(ProtocolState state) {
-		context.changeStateTo(state);
-	}
+    /**
+     * Change state of finite machine.
+     *
+     * @param state state, the Finite Machine will switched to
+     */
+    protected void changeStateTo(ProtocolState state) {
+        context.changeStateTo(state);
+    }
 
-	/**
-	 * Carry out next step of protocol flow.
-	 *
-	 * @return false when no next protocol steps availabe, true - when need to continue
-	 */
-	abstract public boolean next() throws UnsupportedProtocolVersionException, TransportException,
-			UnsupportedSecurityTypeException, AuthenticationFailedException, FatalException;
+    /**
+     * Carry out next step of protocol flow.
+     *
+     * @return false when no next protocol steps availabe, true - when need to continue
+     */
+    abstract public boolean next() throws UnsupportedProtocolVersionException, TransportException,
+            UnsupportedSecurityTypeException, AuthenticationFailedException, FatalException;
 
 }

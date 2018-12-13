@@ -29,7 +29,7 @@ package com.glavsoft.exceptions;
  */
 @SuppressWarnings("serial")
 public class FatalException extends CommonException {
-	public FatalException(String message, Throwable e) {
-		super(message, e);
-	}
+    public FatalException(String message, Throwable e) {
+        super(message, e);
+    }
 }

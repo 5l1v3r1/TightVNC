@@ -36,58 +36,60 @@ import java.util.logging.Logger;
  * Decoders container class
  */
 public class DecodersContainer {
-	private static Map<EncodingType, Class<? extends Decoder>> knownDecoders =
-		new HashMap<EncodingType, Class<? extends Decoder>>();
-	static {
-		knownDecoders.put(EncodingType.TIGHT, TightDecoder.class);
-		knownDecoders.put(EncodingType.HEXTILE, HextileDecoder.class);
-		knownDecoders.put(EncodingType.ZRLE, ZRLEDecoder.class);
-		knownDecoders.put(EncodingType.ZLIB, ZlibDecoder.class);
-		knownDecoders.put(EncodingType.RRE, RREDecoder.class);
-		knownDecoders.put(EncodingType.COPY_RECT, CopyRectDecoder.class);
+    private static Map<EncodingType, Class<? extends Decoder>> knownDecoders =
+            new HashMap<EncodingType, Class<? extends Decoder>>();
+
+    static {
+        knownDecoders.put(EncodingType.TIGHT, TightDecoder.class);
+        knownDecoders.put(EncodingType.HEXTILE, HextileDecoder.class);
+        knownDecoders.put(EncodingType.ZRLE, ZRLEDecoder.class);
+        knownDecoders.put(EncodingType.ZLIB, ZlibDecoder.class);
+        knownDecoders.put(EncodingType.RRE, RREDecoder.class);
+        knownDecoders.put(EncodingType.COPY_RECT, CopyRectDecoder.class);
 //		knownDecoders.put(EncodingType.RAW_ENCODING, RawDecoder.class);
-	}
-	private final Map<EncodingType, Decoder> decoders =
-		new HashMap<EncodingType, Decoder>();
+    }
 
-	public DecodersContainer() {
-		decoders.put(EncodingType.RAW_ENCODING, RawDecoder.getInstance());
-	}
+    private final Map<EncodingType, Decoder> decoders =
+            new HashMap<EncodingType, Decoder>();
 
-	/**
-	 * Instantiate decoders for encodings we are going to use.
-	 *
-	 * @param encodings encodings we need to handle
-	 */
-	public void instantiateDecodersWhenNeeded(Collection<EncodingType> encodings) {
-		for (EncodingType enc : encodings) {
-			if (EncodingType.ordinaryEncodings.contains(enc) && ! decoders.containsKey(enc)) {
-				try {
-					decoders.put(enc, knownDecoders.get(enc).newInstance());
-				} catch (InstantiationException e) {
-					logError(enc, e);
-				} catch (IllegalAccessException e) {
-					logError(enc, e);
-				}
-			}
-		}
-	}
+    public DecodersContainer() {
+        decoders.put(EncodingType.RAW_ENCODING, RawDecoder.getInstance());
+    }
 
-	private void logError(EncodingType enc, Exception e) {
-		Logger.getLogger(this.getClass().getName()).severe("Can not instantiate decoder for encoding type '" +
-				enc.getName() + "' " + e.getMessage());
-	}
+    /**
+     * Instantiate decoders for encodings we are going to use.
+     *
+     * @param encodings encodings we need to handle
+     */
+    public void instantiateDecodersWhenNeeded(Collection<EncodingType> encodings) {
+        for (EncodingType enc : encodings) {
+            if (EncodingType.ordinaryEncodings.contains(enc) && !decoders.containsKey(enc)) {
+                try {
+                    decoders.put(enc, knownDecoders.get(enc).newInstance());
+                } catch (InstantiationException e) {
+                    logError(enc, e);
+                } catch (IllegalAccessException e) {
+                    logError(enc, e);
+                }
+            }
+        }
+    }
 
-	public Decoder getDecoderByType(EncodingType type) {
-		return decoders.get(type);
-	}
+    private void logError(EncodingType enc, Exception e) {
+        Logger.getLogger(this.getClass().getName()).severe("Can not instantiate decoder for encoding type '" +
+                enc.getName() + "' " + e.getMessage());
+    }
 
-	public void resetDecoders() {
-		for (Decoder decoder : decoders.values()) {
-			if (decoder != null) {
-				decoder.reset();
-			}
-		}
-	}
+    public Decoder getDecoderByType(EncodingType type) {
+        return decoders.get(type);
+    }
+
+    public void resetDecoders() {
+        for (Decoder decoder : decoders.values()) {
+            if (decoder != null) {
+                decoder.reset();
+            }
+        }
+    }
 
 }

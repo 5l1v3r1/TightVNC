@@ -33,29 +33,29 @@ import java.util.logging.Logger;
 
 public class SecurityType33State extends SecurityType37State {
 
-	public SecurityType33State(ProtocolContext context) {
-		super(context);
-	}
+    public SecurityType33State(ProtocolContext context) {
+        super(context);
+    }
 
-	@Override
-	protected void negotiateAboutSecurityType()
-			throws TransportException, UnsupportedSecurityTypeException {
+    @Override
+    protected void negotiateAboutSecurityType()
+            throws TransportException, UnsupportedSecurityTypeException {
         Logger.getLogger(getClass().getName()).info("Get Security Type");
-		int type = reader.readInt32();
-		Logger.getLogger(getClass().getName()).info("Type received: " + type);
-		if (0 == type)
-			// throw exception with reason
-			throw new UnsupportedSecurityTypeException(reader.readString());
-		AuthHandler typeSelected = selectAuthHandler(new byte[] {(byte) (0xff & type)},
-					context.getSettings().authCapabilities);
-		if (typeSelected != null) {
-			setUseSecurityResult(typeSelected);
-			Logger.getLogger(getClass().getName()).info("Type accepted: " + typeSelected.getName());
-		} else
-			throw new UnsupportedSecurityTypeException(
-					"No security types supported. Server sent '" +
-					type + "' security type, but we do not support it.");
-		changeStateTo(new AuthenticationState(context, typeSelected));
-	}
+        int type = reader.readInt32();
+        Logger.getLogger(getClass().getName()).info("Type received: " + type);
+        if (0 == type)
+            // throw exception with reason
+            throw new UnsupportedSecurityTypeException(reader.readString());
+        AuthHandler typeSelected = selectAuthHandler(new byte[]{(byte) (0xff & type)},
+                context.getSettings().authCapabilities);
+        if (typeSelected != null) {
+            setUseSecurityResult(typeSelected);
+            Logger.getLogger(getClass().getName()).info("Type accepted: " + typeSelected.getName());
+        } else
+            throw new UnsupportedSecurityTypeException(
+                    "No security types supported. Server sent '" +
+                            type + "' security type, but we do not support it.");
+        changeStateTo(new AuthenticationState(context, typeSelected));
+    }
 
 }

@@ -41,56 +41,57 @@ import java.awt.event.WindowEvent;
 @SuppressWarnings("serial")
 public class PasswordDialog extends JDialog {
 
-	private String password = "";
+    private String password = "";
 
-	private static final int PADDING = 4;
-	private final JLabel messageLabel;
-	public PasswordDialog(Frame owner, final ConnectionWorker onCancel) {
-		super(owner, "VNC Authentication", true);
+    private static final int PADDING = 4;
+    private final JLabel messageLabel;
+
+    public PasswordDialog(Frame owner, final ConnectionWorker onCancel) {
+        super(owner, "VNC Authentication", true);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent windowEvent) {
                 onCancel.cancel();
             }
         });
-		JPanel pane = new JPanel(new GridLayout(0, 1, PADDING, PADDING));
-		add(pane);
-		pane.setBorder(new EmptyBorder(PADDING, PADDING, PADDING, PADDING));
+        JPanel pane = new JPanel(new GridLayout(0, 1, PADDING, PADDING));
+        add(pane);
+        pane.setBorder(new EmptyBorder(PADDING, PADDING, PADDING, PADDING));
 
-		messageLabel = new JLabel("Server requires VNC authentication");
-		pane.add(messageLabel);
+        messageLabel = new JLabel("Server requires VNC authentication");
+        pane.add(messageLabel);
 
-		JPanel passwordPanel = new JPanel();
-		passwordPanel.add(new JLabel("Password:"));
-		final JPasswordField passwordField = new JPasswordField("", 20);
-		passwordPanel.add(passwordField);
-		pane.add(passwordPanel);
+        JPanel passwordPanel = new JPanel();
+        passwordPanel.add(new JLabel("Password:"));
+        final JPasswordField passwordField = new JPasswordField("", 20);
+        passwordPanel.add(passwordField);
+        pane.add(passwordPanel);
 
-		JPanel buttonPanel = new JPanel();
-		JButton loginButton = new JButton("Login");
-		buttonPanel.add(loginButton);
-		loginButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				password = new String(passwordField.getPassword());
-				setVisible(false);
-			}
-		});
+        JPanel buttonPanel = new JPanel();
+        JButton loginButton = new JButton("Login");
+        buttonPanel.add(loginButton);
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                password = new String(passwordField.getPassword());
+                setVisible(false);
+            }
+        });
 
-		JButton closeButton = new JButton("Cancel");
-		buttonPanel.add(closeButton);
-		closeButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+        JButton closeButton = new JButton("Cancel");
+        buttonPanel.add(closeButton);
+        closeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 password = null;
-				setVisible(false);
-				onCancel.cancel();
-			}
-		});
+                setVisible(false);
+                onCancel.cancel();
+            }
+        });
 
-		pane.add(buttonPanel);
+        pane.add(buttonPanel);
 
-		getRootPane().setDefaultButton(loginButton);
+        getRootPane().setDefaultButton(loginButton);
         Utils.decorateDialog(this);
         Utils.centerWindow(this);
         addWindowFocusListener(new WindowAdapter() {
@@ -99,17 +100,16 @@ public class PasswordDialog extends JDialog {
                 passwordField.requestFocusInWindow();
             }
         });
-	}
+    }
 
-	public void setServerHostName(String serverHostName) {
-		messageLabel.setText("Server '" + serverHostName + "' requires VNC authentication");
-		pack();
-	}
+    public void setServerHostName(String serverHostName) {
+        messageLabel.setText("Server '" + serverHostName + "' requires VNC authentication");
+        pack();
+    }
 
-	public String getPassword() {
-		return password;
-	}
-
+    public String getPassword() {
+        return password;
+    }
 
 
 }

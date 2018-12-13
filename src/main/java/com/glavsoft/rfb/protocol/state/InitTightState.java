@@ -31,45 +31,45 @@ import com.glavsoft.rfb.protocol.ProtocolSettings;
 
 /**
  * Server Interaction Capabilities Message (protocol versions 3.7t, 3.8t)
- *
+ * <p>
  * If TightVNC protocol extensions are enabled, the server informs the client
  * what message types it supports in addition to ones defined in the standard
  * RFB protocol.
  * Also, the server sends the list of all supported encodings (note that it's
  * not necessary to advertise the "raw" encoding sinse it MUST be supported in
  * RFB 3.x protocols).
- *
+ * <p>
  * This data immediately follows the server initialisation message.
  */
 public class InitTightState extends InitState {
 
-	public InitTightState(ProtocolContext context) {
-		super(context);
-	}
+    public InitTightState(ProtocolContext context) {
+        super(context);
+    }
 
-	/**
-	 * typedef struct _rfbInteractionCapsMsg {
-	 * 		CARD16 nServerMessageTypes;
-	 * 		CARD16 nClientMessageTypes;
-	 * 		CARD16 nEncodingTypes;
-	 * 		CARD16 pad;><------><------>// reserved, must be 0
-	 * 		// followed by nServerMessageTypes * rfbCapabilityInfo structures
-	 * 		// followed by nClientMessageTypes * rfbCapabilityInfo structures
-	 * } rfbInteractionCapsMsg;
-	 * #define sz_rfbInteractionCapsMsg 8
-	 */
-	@Override
-	protected void clientAndServerInit() throws TransportException {
-		ServerInitMessage serverInitMessage = getServerInitMessage();
-		int nServerMessageTypes = reader.readUInt16();
-		int nClientMessageTypes = reader.readUInt16();
-		int nEncodingTypes = reader.readUInt16();
-		reader.readUInt16(); //padding
-		ProtocolSettings settings = context.getSettings();
-		settings.serverMessagesCapabilities.read(reader, nServerMessageTypes);
-		settings.clientMessagesCapabilities.read(reader, nClientMessageTypes);
-		settings.encodingTypesCapabilities.read(reader, nEncodingTypes);
-		completeContextData(serverInitMessage);
-	}
+    /**
+     * typedef struct _rfbInteractionCapsMsg {
+     * CARD16 nServerMessageTypes;
+     * CARD16 nClientMessageTypes;
+     * CARD16 nEncodingTypes;
+     * CARD16 pad;><------><------>// reserved, must be 0
+     * // followed by nServerMessageTypes * rfbCapabilityInfo structures
+     * // followed by nClientMessageTypes * rfbCapabilityInfo structures
+     * } rfbInteractionCapsMsg;
+     * #define sz_rfbInteractionCapsMsg 8
+     */
+    @Override
+    protected void clientAndServerInit() throws TransportException {
+        ServerInitMessage serverInitMessage = getServerInitMessage();
+        int nServerMessageTypes = reader.readUInt16();
+        int nClientMessageTypes = reader.readUInt16();
+        int nEncodingTypes = reader.readUInt16();
+        reader.readUInt16(); //padding
+        ProtocolSettings settings = context.getSettings();
+        settings.serverMessagesCapabilities.read(reader, nServerMessageTypes);
+        settings.clientMessagesCapabilities.read(reader, nClientMessageTypes);
+        settings.encodingTypesCapabilities.read(reader, nEncodingTypes);
+        completeContextData(serverInitMessage);
+    }
 
 }

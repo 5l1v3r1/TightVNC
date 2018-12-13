@@ -30,5 +30,5 @@ import com.glavsoft.core.SettingsChangedEvent;
  * @author dime at tightvnc.com
  */
 public interface IChangeSettingsListener {
-	void settingsChanged(SettingsChangedEvent event);
+    void settingsChanged(SettingsChangedEvent event);
 }

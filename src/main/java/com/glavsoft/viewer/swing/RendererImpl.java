@@ -39,71 +39,72 @@ import java.util.concurrent.TimeoutException;
 public class RendererImpl extends Renderer implements ImageObserver {
     CyclicBarrier barrier = new CyclicBarrier(2);
     private final Image offscreanImage;
-	public RendererImpl(Reader reader, int width, int height, PixelFormat pixelFormat) {
-		if (0 == width) width = 1;
-		if (0 == height) height = 1;
-		init(reader, width, height, pixelFormat);
-		ColorModel colorModel = new DirectColorModel(24, 0xff0000, 0xff00, 0xff);
-		SampleModel sampleModel = colorModel.createCompatibleSampleModel(width,
-				height);
 
-		DataBuffer dataBuffer = new DataBufferInt(pixels, width * height);
-		WritableRaster raster = Raster.createWritableRaster(sampleModel,
-				dataBuffer, null);
-		offscreanImage = new BufferedImage(colorModel, raster, false, null);
-		cursor = new SoftCursorImpl(0, 0, 0, 0);
-	}
+    public RendererImpl(Reader reader, int width, int height, PixelFormat pixelFormat) {
+        if (0 == width) width = 1;
+        if (0 == height) height = 1;
+        init(reader, width, height, pixelFormat);
+        ColorModel colorModel = new DirectColorModel(24, 0xff0000, 0xff00, 0xff);
+        SampleModel sampleModel = colorModel.createCompatibleSampleModel(width,
+                height);
 
-	/**
-	 * Draw jpeg image data
-	 *
-	 * @param bytes jpeg image data array
-	 * @param offset start offset at data array
-	 * @param jpegBufferLength jpeg image data array length
-	 * @param rect image location and dimensions
-	 */
-	@Override
-	public void drawJpegImage(byte[] bytes, int offset, int jpegBufferLength,
-			FramebufferUpdateRectangle rect) {
-		Image jpegImage = Toolkit.getDefaultToolkit().createImage(bytes,
-				offset, jpegBufferLength);
-		Toolkit.getDefaultToolkit().prepareImage(jpegImage, -1, -1, this);
-		try {
-			barrier.await(3, TimeUnit.SECONDS);
-		} catch (InterruptedException e) {
-			// nop
-		} catch (BrokenBarrierException e) {
-			// nop
-		} catch (TimeoutException e) {
-			// nop
-		}
-		Graphics graphics = offscreanImage.getGraphics();
-		graphics.drawImage(jpegImage, rect.x, rect.y, rect.width, rect.height, this);
-	}
+        DataBuffer dataBuffer = new DataBufferInt(pixels, width * height);
+        WritableRaster raster = Raster.createWritableRaster(sampleModel,
+                dataBuffer, null);
+        offscreanImage = new BufferedImage(colorModel, raster, false, null);
+        cursor = new SoftCursorImpl(0, 0, 0, 0);
+    }
 
-	@Override
-	public boolean imageUpdate(Image img, int infoflags, int x, int y,
-			int width, int height) {
-		boolean isReady = (infoflags & (ALLBITS | ABORT)) != 0;
-		if (isReady) {
-			try {
-				barrier.await();
-			} catch (InterruptedException e) {
-				// nop
-			} catch (BrokenBarrierException e) {
-				// nop
-			}
-		}
-		return ! isReady;
-	}
+    /**
+     * Draw jpeg image data
+     *
+     * @param bytes            jpeg image data array
+     * @param offset           start offset at data array
+     * @param jpegBufferLength jpeg image data array length
+     * @param rect             image location and dimensions
+     */
+    @Override
+    public void drawJpegImage(byte[] bytes, int offset, int jpegBufferLength,
+                              FramebufferUpdateRectangle rect) {
+        Image jpegImage = Toolkit.getDefaultToolkit().createImage(bytes,
+                offset, jpegBufferLength);
+        Toolkit.getDefaultToolkit().prepareImage(jpegImage, -1, -1, this);
+        try {
+            barrier.await(3, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            // nop
+        } catch (BrokenBarrierException e) {
+            // nop
+        } catch (TimeoutException e) {
+            // nop
+        }
+        Graphics graphics = offscreanImage.getGraphics();
+        graphics.drawImage(jpegImage, rect.x, rect.y, rect.width, rect.height, this);
+    }
 
-	/* Swing specific interface */
-	public Image getOffscreenImage() {
-		return offscreanImage;
-	}
+    @Override
+    public boolean imageUpdate(Image img, int infoflags, int x, int y,
+                               int width, int height) {
+        boolean isReady = (infoflags & (ALLBITS | ABORT)) != 0;
+        if (isReady) {
+            try {
+                barrier.await();
+            } catch (InterruptedException e) {
+                // nop
+            } catch (BrokenBarrierException e) {
+                // nop
+            }
+        }
+        return !isReady;
+    }
 
-	public SoftCursorImpl getCursor() {
-		return (SoftCursorImpl) cursor;
-	}
+    /* Swing specific interface */
+    public Image getOffscreenImage() {
+        return offscreanImage;
+    }
+
+    public SoftCursorImpl getCursor() {
+        return (SoftCursorImpl) cursor;
+    }
 
 }

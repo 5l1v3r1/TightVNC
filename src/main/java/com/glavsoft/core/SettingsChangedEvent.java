@@ -28,14 +28,14 @@ package com.glavsoft.core;
  * @author dime at tightvnc.com
  */
 public class SettingsChangedEvent {
-	private final Object source;
+    private final Object source;
 
-	public SettingsChangedEvent(Object source) {
-		this.source = source;
-	}
+    public SettingsChangedEvent(Object source) {
+        this.source = source;
+    }
 
-	public Object getSource() {
-		return source;
-	}
+    public Object getSource() {
+        return source;
+    }
 
 }

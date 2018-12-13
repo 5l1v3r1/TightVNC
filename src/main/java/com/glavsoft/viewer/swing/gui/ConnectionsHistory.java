@@ -2,10 +2,10 @@ package com.glavsoft.viewer.swing.gui;
 
 import com.glavsoft.rfb.protocol.ProtocolSettings;
 import com.glavsoft.utils.Strings;
-import com.glavsoft.viewer.mvp.Model;
-import com.glavsoft.viewer.swing.ConnectionParams;
 import com.glavsoft.viewer.UiSettings;
 import com.glavsoft.viewer.UiSettingsData;
+import com.glavsoft.viewer.mvp.Model;
+import com.glavsoft.viewer.swing.ConnectionParams;
 
 import java.io.*;
 import java.security.AccessControlException;
@@ -18,7 +18,7 @@ import java.util.prefs.Preferences;
  * @author dime at tightvnc.com
  */
 public class ConnectionsHistory implements Model {
-	private static int MAX_ITEMS = 32;
+    private static int MAX_ITEMS = 32;
     public static final String CONNECTIONS_HISTORY_ROOT_NODE = "com/glavsoft/viewer/connectionsHistory";
     public static final String NODE_HOST_NAME = "hostName";
     public static final String NODE_PORT_NUMBER = "portNumber";
@@ -55,17 +55,17 @@ public class ConnectionsHistory implements Model {
         }
         try {
             final String[] orderNums;
-			orderNums = connectionsHistoryNode.childrenNames();
-			SortedMap<Integer, ConnectionParams> conns = new TreeMap<Integer, ConnectionParams>();
+            orderNums = connectionsHistoryNode.childrenNames();
+            SortedMap<Integer, ConnectionParams> conns = new TreeMap<Integer, ConnectionParams>();
             HashSet<ConnectionParams> uniques = new HashSet<ConnectionParams>();
-			for (String orderNum : orderNums) {
+            for (String orderNum : orderNums) {
                 int num = 0;
                 try {
                     num = Integer.parseInt(orderNum);
                 } catch (NumberFormatException skip) {
                     //nop
                 }
-				Preferences node = connectionsHistoryNode.node(orderNum);
+                Preferences node = connectionsHistoryNode.node(orderNum);
                 String hostName = node.get(NODE_HOST_NAME, null);
                 if (null == hostName) continue; // skip entries without hostName field
                 ConnectionParams cp = new ConnectionParams(hostName, node.getInt(NODE_PORT_NUMBER, 0),
@@ -77,20 +77,20 @@ public class ConnectionsHistory implements Model {
                 logger.finest("deserialialize: " + cp.toPrint());
                 retrieveProtocolSettings(node, cp);
                 retrieveUiSettings(node, cp);
-			}
-			int itemsCount = 0;
-			for (ConnectionParams cp : conns.values()) {
-				if (itemsCount < MAX_ITEMS) {
+            }
+            int itemsCount = 0;
+            for (ConnectionParams cp : conns.values()) {
+                if (itemsCount < MAX_ITEMS) {
                     connections.add(cp);
-				} else {
-					connectionsHistoryNode.node(cp.hostName).removeNode();
-				}
-				++itemsCount;
-			}
-		} catch (BackingStoreException e) {
+                } else {
+                    connectionsHistoryNode.node(cp.hostName).removeNode();
+                }
+                ++itemsCount;
+            }
+        } catch (BackingStoreException e) {
             logger.severe("Cannot retrieve connections history info: " + e.getMessage());
-		}
-	}
+        }
+    }
 
     private void retrieveUiSettings(Preferences node, ConnectionParams cp) {
         byte[] bytes = node.getByteArray(NODE_UI_SETTINGS, new byte[0]);
@@ -130,8 +130,8 @@ public class ConnectionsHistory implements Model {
      */
     @SuppressWarnings("UnusedDeclaration")
     public LinkedList<ConnectionParams> getConnectionsList() {
-		return connections;
-	}
+        return connections;
+    }
 
     public ProtocolSettings getProtocolSettings(ConnectionParams cp) {
         return protocolSettingsMap.get(cp);
@@ -148,12 +148,12 @@ public class ConnectionsHistory implements Model {
             int num = 0;
             for (ConnectionParams cp : connections) {
                 if (num >= MAX_ITEMS) break;
-                if ( ! Strings.isTrimmedEmpty(cp.hostName)) {
-                        addNode(cp, connectionsHistoryNode, num++);
+                if (!Strings.isTrimmedEmpty(cp.hostName)) {
+                    addNode(cp, connectionsHistoryNode, num++);
                 }
             }
         } catch (AccessControlException ace) { /*nop*/ }
-	}
+    }
 
 
     public void clear() {
@@ -165,11 +165,11 @@ public class ConnectionsHistory implements Model {
         Preferences connectionsHistoryNode = getConnectionHistoryNode();
         try {
             for (String host : connectionsHistoryNode.childrenNames()) {
-				connectionsHistoryNode.node(host).removeNode();
-			}
-		} catch (BackingStoreException e) {
+                connectionsHistoryNode.node(host).removeNode();
+            }
+        } catch (BackingStoreException e) {
             logger.severe("Cannot remove node: " + e.getMessage());
-		}
+        }
     }
 
     private Preferences getConnectionHistoryNode() {
@@ -185,11 +185,11 @@ public class ConnectionsHistory implements Model {
         serializeProtocolSettings(node, protocolSettings);
         serializeUiSettingsData(node, uiSettingsData);
         try {
-			node.flush();
-		} catch (BackingStoreException e) {
+            node.flush();
+        } catch (BackingStoreException e) {
             logger.severe("Cannot retrieve connections history info: " + e.getMessage());
-		}
-	}
+        }
+    }
 
     private void serializeUiSettingsData(Preferences node, UiSettingsData uiSettingsData) {
         if (uiSettingsData != null) {
@@ -224,9 +224,9 @@ public class ConnectionsHistory implements Model {
         node.putInt(NODE_PORT_NUMBER, connectionParams.getPortNumber());
         if (connectionParams.useSsh()) {
             node.putBoolean(NODE_USE_SSH, connectionParams.useSsh());
-            node.put(NODE_SSH_USER_NAME, connectionParams.sshUserName != null ? connectionParams.sshUserName: "");
-		    node.put(NODE_SSH_HOST_NAME, connectionParams.sshHostName != null ? connectionParams.sshHostName: "");
-		    node.putInt(NODE_SSH_PORT_NUMBER, connectionParams.getSshPortNumber());
+            node.put(NODE_SSH_USER_NAME, connectionParams.sshUserName != null ? connectionParams.sshUserName : "");
+            node.put(NODE_SSH_HOST_NAME, connectionParams.sshHostName != null ? connectionParams.sshHostName : "");
+            node.putInt(NODE_SSH_PORT_NUMBER, connectionParams.getSshPortNumber());
         }
         logger.finest("serialized (" + node.name() + ") " + connectionParams.toPrint());
     }
@@ -236,23 +236,23 @@ public class ConnectionsHistory implements Model {
     }
 
     public void reorder(ConnectionParams connectionParams, ProtocolSettings protocolSettings, UiSettings uiSettings) {
-        reorder(connectionParams, protocolSettings, uiSettings != null? uiSettings.getData() : null);
+        reorder(connectionParams, protocolSettings, uiSettings != null ? uiSettings.getData() : null);
     }
 
     private void reorder(ConnectionParams connectionParams, ProtocolSettings protocolSettings, UiSettingsData uiSettingsData) {
         while (connections.remove(connectionParams)) {/*empty - remove all occurrences (if any)*/}
-		LinkedList<ConnectionParams> cpList = new LinkedList<ConnectionParams>();
-		cpList.addAll(connections);
+        LinkedList<ConnectionParams> cpList = new LinkedList<ConnectionParams>();
+        cpList.addAll(connections);
 
-		connections.clear();
-		connections.add(new ConnectionParams(connectionParams));
-		connections.addAll(cpList);
+        connections.clear();
+        connections.add(new ConnectionParams(connectionParams));
+        connections.addAll(cpList);
         storeSettings(connectionParams, protocolSettings, uiSettingsData);
     }
 
     private void storeSettings(ConnectionParams connectionParams, ProtocolSettings protocolSettings, UiSettingsData uiSettingsData) {
         if (protocolSettings != null) {
-        ProtocolSettings savedSettings = protocolSettingsMap.get(connectionParams);
+            ProtocolSettings savedSettings = protocolSettingsMap.get(connectionParams);
             if (savedSettings != null) {
                 savedSettings.copyDataFrom(protocolSettings);
             } else {
@@ -277,7 +277,7 @@ public class ConnectionsHistory implements Model {
      * @return most suitable cp
      */
     public ConnectionParams getMostSuitableConnection(ConnectionParams orig) {
-        ConnectionParams res = connections.isEmpty()? orig: connections.get(0);
+        ConnectionParams res = connections.isEmpty() ? orig : connections.get(0);
         if (null == orig || Strings.isTrimmedEmpty(orig.hostName)) return res;
         for (ConnectionParams cp : connections) {
             if (orig.equals(cp)) return cp;
@@ -291,7 +291,7 @@ public class ConnectionsHistory implements Model {
                 continue;
             }
             if (orig.hostName.equals(cp.hostName) &&
-                orig.getPortNumber() == cp.getPortNumber() &&
+                    orig.getPortNumber() == cp.getPortNumber() &&
                     orig.useSsh() == cp.useSsh() && orig.useSsh() != res.useSsh()) {
                 res = cp;
                 continue;
@@ -329,7 +329,7 @@ public class ConnectionsHistory implements Model {
 
     private boolean compareTextFields(String orig, String res, String test) {
         return (orig != null && test != null && res != null) &&
-                orig.equals(test) && ! orig.equals(res);
+                orig.equals(test) && !orig.equals(res);
     }
 
     public boolean isEmpty() {

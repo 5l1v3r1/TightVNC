@@ -24,49 +24,50 @@
 
 package com.glavsoft.rfb.protocol.auth;
 
+import com.glavsoft.exceptions.UnsupportedSecurityTypeException;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import com.glavsoft.exceptions.UnsupportedSecurityTypeException;
 
 /**
  * Security types that implemented
  */
 public enum SecurityType {
-	NONE_AUTHENTICATION(1),
-	VNC_AUTHENTICATION(2),
-//	int RA2_AUTHENTICATION = 5;
+    NONE_AUTHENTICATION(1),
+    VNC_AUTHENTICATION(2),
+    //	int RA2_AUTHENTICATION = 5;
 //	int RA2NE_AUTHENTICATION = 6;
-	TIGHT_AUTHENTICATION(16);
+    TIGHT_AUTHENTICATION(16);
 //	int ULTRA_AUTHENTICATION = 17;
 //	int TLS_AUTHENTICATION = 18;
 //	int VENCRYPT_AUTHENTICATION = 19;
 
-	private int id;
-	private SecurityType(int id) {
-		this.id = id;
-	}
+    private int id;
 
-	public int getId() {
-		return id;
-	}
+    private SecurityType(int id) {
+        this.id = id;
+    }
 
-	@SuppressWarnings("serial")
-	public
-	static Map<Integer, AuthHandler> implementedSecurityTypes =
-		new LinkedHashMap<Integer, AuthHandler>() {{
-			put(TIGHT_AUTHENTICATION.getId(), new TightAuthentication());
-			put(VNC_AUTHENTICATION.getId(), new VncAuthentication());
-			put(NONE_AUTHENTICATION.getId(), new NoneAuthentication());
-	}};
+    public int getId() {
+        return id;
+    }
 
-	public static AuthHandler getAuthHandlerById(int id) throws UnsupportedSecurityTypeException {
-		AuthHandler typeSelected = null;
-		typeSelected = implementedSecurityTypes.get(id);
-		if (null == typeSelected) {
-			throw new UnsupportedSecurityTypeException("Not supported: " + id);
-		}
-		return typeSelected;
-	}
+    @SuppressWarnings("serial")
+    public
+    static Map<Integer, AuthHandler> implementedSecurityTypes =
+            new LinkedHashMap<Integer, AuthHandler>() {{
+                put(TIGHT_AUTHENTICATION.getId(), new TightAuthentication());
+                put(VNC_AUTHENTICATION.getId(), new VncAuthentication());
+                put(NONE_AUTHENTICATION.getId(), new NoneAuthentication());
+            }};
+
+    public static AuthHandler getAuthHandlerById(int id) throws UnsupportedSecurityTypeException {
+        AuthHandler typeSelected = null;
+        typeSelected = implementedSecurityTypes.get(id);
+        if (null == typeSelected) {
+            throw new UnsupportedSecurityTypeException("Not supported: " + id);
+        }
+        return typeSelected;
+    }
 
 }

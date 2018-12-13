@@ -30,13 +30,13 @@ import com.glavsoft.transport.Reader;
 
 public class CopyRectDecoder extends Decoder {
 
-	@Override
-	public void decode(Reader reader, Renderer renderer,
-			FramebufferUpdateRectangle rect) throws TransportException {
-		int srcX = reader.readUInt16();
-		int srcY = reader.readUInt16();
-		if (rect.width == 0  || rect.height == 0) return;
-		renderer.copyRect(srcX, srcY, rect);
-	}
+    @Override
+    public void decode(Reader reader, Renderer renderer,
+                       FramebufferUpdateRectangle rect) throws TransportException {
+        int srcX = reader.readUInt16();
+        int srcY = reader.readUInt16();
+        if (rect.width == 0 || rect.height == 0) return;
+        renderer.copyRect(srcX, srcY, rect);
+    }
 
 }

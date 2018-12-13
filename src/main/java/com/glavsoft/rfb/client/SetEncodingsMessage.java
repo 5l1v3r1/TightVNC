@@ -24,38 +24,38 @@
 
 package com.glavsoft.rfb.client;
 
-import java.util.Set;
-
 import com.glavsoft.exceptions.TransportException;
 import com.glavsoft.rfb.encoding.EncodingType;
 import com.glavsoft.transport.Writer;
 
+import java.util.Set;
+
 public class SetEncodingsMessage implements ClientToServerMessage {
-	private final Set<EncodingType> encodings;
+    private final Set<EncodingType> encodings;
 
-	public SetEncodingsMessage(Set<EncodingType> set) {
-		this.encodings = set;
-	}
+    public SetEncodingsMessage(Set<EncodingType> set) {
+        this.encodings = set;
+    }
 
-	@Override
-	public void send(Writer writer) throws TransportException {
-		writer.writeByte(SET_ENCODINGS);
-		writer.writeByte(0); // padding byte
-		writer.writeInt16(encodings.size());
-		for (EncodingType enc : encodings) {
-			writer.writeInt32(enc.getId());
-		}
-		writer.flush();
-	}
+    @Override
+    public void send(Writer writer) throws TransportException {
+        writer.writeByte(SET_ENCODINGS);
+        writer.writeByte(0); // padding byte
+        writer.writeInt16(encodings.size());
+        for (EncodingType enc : encodings) {
+            writer.writeInt32(enc.getId());
+        }
+        writer.flush();
+    }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder("SetEncodingsMessage: [encodings: ");
-		for (EncodingType enc : encodings) {
-			sb.append(enc.name()).append(',');
-		}
-		sb.setLength(sb.length()-1);
-		return sb.append(']').toString();
-	}
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("SetEncodingsMessage: [encodings: ");
+        for (EncodingType enc : encodings) {
+            sb.append(enc.name()).append(',');
+        }
+        sb.setLength(sb.length() - 1);
+        return sb.append(']').toString();
+    }
 
 }

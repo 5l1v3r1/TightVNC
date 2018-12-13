@@ -42,26 +42,26 @@ import com.glavsoft.transport.Writer;
  */
 public class KeyEventMessage implements ClientToServerMessage {
 
-	private final int key;
-	private final boolean downFlag;
+    private final int key;
+    private final boolean downFlag;
 
-	public KeyEventMessage(int key, boolean downFlag) {
-		this.downFlag = downFlag;
-		this.key = key;
-	}
+    public KeyEventMessage(int key, boolean downFlag) {
+        this.downFlag = downFlag;
+        this.key = key;
+    }
 
-	@Override
-	public void send(Writer writer) throws TransportException {
-		writer.writeByte(KEY_EVENT);
-		writer.writeByte(downFlag ? 1 : 0);
-		writer.writeInt16(0); // padding
-		writer.write(key);
-		writer.flush();
-	}
+    @Override
+    public void send(Writer writer) throws TransportException {
+        writer.writeByte(KEY_EVENT);
+        writer.writeByte(downFlag ? 1 : 0);
+        writer.writeInt16(0); // padding
+        writer.write(key);
+        writer.flush();
+    }
 
-	@Override
-	public String toString() {
-		return "[KeyEventMessage: [down-flag: "+downFlag + ", key: " + key +"("+Integer.toHexString(key)+")]";
-	}
+    @Override
+    public String toString() {
+        return "[KeyEventMessage: [down-flag: " + downFlag + ", key: " + key + "(" + Integer.toHexString(key) + ")]";
+    }
 
 }

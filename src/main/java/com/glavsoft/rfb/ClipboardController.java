@@ -28,32 +28,32 @@ package com.glavsoft.rfb;
  * Interface for handling clipboard texts
  */
 public interface ClipboardController extends IChangeSettingsListener {
-	void updateSystemClipboard(byte[] bytes);
+    void updateSystemClipboard(byte[] bytes);
 
-	/**
-	 * Get text clipboard contens when needed send to remote, or null vise versa
-	 * Implement this method such a way in swing context, because swing's clipboard
-	 * update listener invoked only on DataFlavor changes not content changes.
-	 * Implement as returned null on systems where clipboard listeners work correctly.
-	 *
-	 * @return clipboad string contents if it is changed from last method call
-	 * or null when clipboard contains non text object or clipboard contents didn't changed
-	 */
-	String getRenewedClipboardText();
+    /**
+     * Get text clipboard contens when needed send to remote, or null vise versa
+     * Implement this method such a way in swing context, because swing's clipboard
+     * update listener invoked only on DataFlavor changes not content changes.
+     * Implement as returned null on systems where clipboard listeners work correctly.
+     *
+     * @return clipboad string contents if it is changed from last method call
+     * or null when clipboard contains non text object or clipboard contents didn't changed
+     */
+    String getRenewedClipboardText();
 
-	/**
-	 * Returns clipboard text content previously retrieved frim system clipboard by
-	 * updateSavedClippoardContent()
-	 *
-	 * @return clipboard text content
-	 */
-	String getClipboardText();
+    /**
+     * Returns clipboard text content previously retrieved frim system clipboard by
+     * updateSavedClippoardContent()
+     *
+     * @return clipboard text content
+     */
+    String getClipboardText();
 
-	/**
-	 * Enable/disable clipboard transfer
-	 *
-	 * @param enable
-	 */
-	void setEnabled(boolean enable);
+    /**
+     * Enable/disable clipboard transfer
+     *
+     * @param enable
+     */
+    void setEnabled(boolean enable);
 
 }

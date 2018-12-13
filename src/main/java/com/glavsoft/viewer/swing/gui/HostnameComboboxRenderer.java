@@ -12,7 +12,7 @@ public class HostnameComboboxRenderer extends DefaultListCellRenderer {
 
     @Override
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-        String stringValue = renderListItem((ConnectionParams)value);
+        String stringValue = renderListItem((ConnectionParams) value);
         setText(stringValue);
         setFont(getFont().deriveFont(Font.PLAIN));
         if (isSelected) {
@@ -26,7 +26,7 @@ public class HostnameComboboxRenderer extends DefaultListCellRenderer {
     }
 
     public String renderListItem(ConnectionParams cp) {
-        String s = "<html><b>" +cp.hostName + "</b>:" + cp.getPortNumber();
+        String s = "<html><b>" + cp.hostName + "</b>:" + cp.getPortNumber();
         if (cp.useSsh()) {
             s += " <i>(via ssh://" + cp.sshUserName + "@" + cp.sshHostName + ":" + cp.getSshPortNumber() + ")</i>";
         }

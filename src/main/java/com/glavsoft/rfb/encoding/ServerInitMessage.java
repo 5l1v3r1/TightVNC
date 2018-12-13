@@ -36,45 +36,45 @@ import com.glavsoft.transport.Reader;
  * name-length - U8 array - name-string
  */
 public class ServerInitMessage {
-	protected int frameBufferWidth;
+    protected int frameBufferWidth;
     protected int frameBufferHeight;
     protected PixelFormat pixelFormat;
     protected String name;
 
-	public ServerInitMessage(Reader reader) throws TransportException {
-		frameBufferWidth = reader.readUInt16();
-		frameBufferHeight = reader.readUInt16();
-		pixelFormat = new PixelFormat();
-		pixelFormat.fill(reader);
-		name = reader.readString();
-	}
+    public ServerInitMessage(Reader reader) throws TransportException {
+        frameBufferWidth = reader.readUInt16();
+        frameBufferHeight = reader.readUInt16();
+        pixelFormat = new PixelFormat();
+        pixelFormat.fill(reader);
+        name = reader.readString();
+    }
 
-	protected ServerInitMessage() {
-		// empty
-	}
+    protected ServerInitMessage() {
+        // empty
+    }
 
-	public int getFrameBufferWidth() {
-		return frameBufferWidth;
-	}
+    public int getFrameBufferWidth() {
+        return frameBufferWidth;
+    }
 
-	public int getFrameBufferHeight() {
-		return frameBufferHeight;
-	}
+    public int getFrameBufferHeight() {
+        return frameBufferHeight;
+    }
 
-	public PixelFormat getPixelFormat() {
-		return pixelFormat;
-	}
+    public PixelFormat getPixelFormat() {
+        return pixelFormat;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
     @Override
     public String toString() {
-    	return "ServerInitMessage: [name: "+ name +
-    	", framebuffer-width: " + String.valueOf(frameBufferWidth) +
-    	", framebuffer-height: " + String.valueOf(frameBufferHeight) +
-    	", server-pixel-format: " + pixelFormat +
-    	"]";
+        return "ServerInitMessage: [name: " + name +
+                ", framebuffer-width: " + String.valueOf(frameBufferWidth) +
+                ", framebuffer-height: " + String.valueOf(frameBufferHeight) +
+                ", server-pixel-format: " + pixelFormat +
+                "]";
     }
 }

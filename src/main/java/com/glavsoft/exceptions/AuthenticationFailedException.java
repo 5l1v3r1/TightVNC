@@ -30,17 +30,19 @@ package com.glavsoft.exceptions;
 @SuppressWarnings("serial")
 public class AuthenticationFailedException extends ProtocolException {
 
-	private String reason;
+    private String reason;
 
-	public AuthenticationFailedException(String message) {
-		super(message);
-	}
-	public AuthenticationFailedException(String message, String reason) {
-		super(message);
-		this.reason = reason;
-	}
-	public String getReason() {
-		return reason;
-	}
+    public AuthenticationFailedException(String message) {
+        super(message);
+    }
+
+    public AuthenticationFailedException(String message, String reason) {
+        super(message);
+        this.reason = reason;
+    }
+
+    public String getReason() {
+        return reason;
+    }
 
 }

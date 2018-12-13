@@ -28,7 +28,7 @@ package com.glavsoft.rfb.protocol;
  * How to track local mouse cursor.
  */
 public enum LocalPointer {
-	ON,
-	OFF,
-	HIDE,
+    ON,
+    OFF,
+    HIDE,
 }

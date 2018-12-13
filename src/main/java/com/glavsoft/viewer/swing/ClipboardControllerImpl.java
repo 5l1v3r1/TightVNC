@@ -41,114 +41,116 @@ import java.nio.charset.Charset;
 import java.security.AccessControlException;
 
 public class ClipboardControllerImpl implements ClipboardController, Runnable {
-	private static final String STANDARD_CHARSET = "ISO-8859-1"; // aka Latin-1
-	private static final long CLIPBOARD_UPDATE_CHECK_INTERVAL_MILS = 1000L;
-	private Clipboard clipboard;
-	private String clipboardText = null;
-	private volatile boolean isRunning;
-	private boolean isEnabled;
-	private final ProtocolContext context;
-	private Charset charset;
+    private static final String STANDARD_CHARSET = "ISO-8859-1"; // aka Latin-1
+    private static final long CLIPBOARD_UPDATE_CHECK_INTERVAL_MILS = 1000L;
+    private Clipboard clipboard;
+    private String clipboardText = null;
+    private volatile boolean isRunning;
+    private boolean isEnabled;
+    private final ProtocolContext context;
+    private Charset charset;
 
-	public ClipboardControllerImpl(ProtocolContext context, String charsetName) {
-		this.context = context;
-		try {
-			clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-			updateSavedClipboardContent(); // prevent onstart clipboard content sending
-		} catch (AccessControlException e) { /*nop*/ }
-		
-		if (Strings.isTrimmedEmpty(charsetName)) {
-			charset = Charset.defaultCharset();
-		} else if ("standard".equalsIgnoreCase(charsetName)) {
-			charset = Charset.forName(STANDARD_CHARSET);
-		} else {
-			charset = Charset.isSupported(charsetName) ? Charset.forName(charsetName) : Charset.defaultCharset();
-		}
-		// not supported UTF-charsets as they are multibytes.
-		// add others multibytes charsets on need
-		if (charset.name().startsWith("UTF")) {
-			charset = Charset.forName(STANDARD_CHARSET);
-		}
-	}
+    public ClipboardControllerImpl(ProtocolContext context, String charsetName) {
+        this.context = context;
+        try {
+            clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            updateSavedClipboardContent(); // prevent onstart clipboard content sending
+        } catch (AccessControlException e) { /*nop*/ }
 
-	@Override
-	public void updateSystemClipboard(byte[] bytes) {
-		if (clipboard != null) {
-			StringSelection stringSelection = new StringSelection(new String(bytes, charset));
-			if (isEnabled) {
-				clipboard.setContents(stringSelection, null);
-			}
-		}
-	}
+        if (Strings.isTrimmedEmpty(charsetName)) {
+            charset = Charset.defaultCharset();
+        } else if ("standard".equalsIgnoreCase(charsetName)) {
+            charset = Charset.forName(STANDARD_CHARSET);
+        } else {
+            charset = Charset.isSupported(charsetName) ? Charset.forName(charsetName) : Charset.defaultCharset();
+        }
+        // not supported UTF-charsets as they are multibytes.
+        // add others multibytes charsets on need
+        if (charset.name().startsWith("UTF")) {
+            charset = Charset.forName(STANDARD_CHARSET);
+        }
+    }
 
-	/**
-	 *	Callback for clipboard changes listeners
-	 *  Retrieves text content from system clipboard which then available
-	 *  through getClipboardText().
-	 */
-	private void updateSavedClipboardContent() {
-		if (clipboard != null && clipboard.isDataFlavorAvailable(DataFlavor.stringFlavor)) {
-			try {
-				clipboardText = (String)clipboard.getData(DataFlavor.stringFlavor);
-			} catch (UnsupportedFlavorException e) {
-				// ignore
-			} catch (IOException e) {
-				// ignore
-			}
-		} else {
-			clipboardText = null;
-		}
-	}
+    @Override
+    public void updateSystemClipboard(byte[] bytes) {
+        if (clipboard != null) {
+            StringSelection stringSelection = new StringSelection(new String(bytes, charset));
+            if (isEnabled) {
+                clipboard.setContents(stringSelection, null);
+            }
+        }
+    }
 
-	@Override
-	public String getClipboardText() {
-		return clipboardText;
-	}
+    /**
+     * Callback for clipboard changes listeners
+     * Retrieves text content from system clipboard which then available
+     * through getClipboardText().
+     */
+    private void updateSavedClipboardContent() {
+        if (clipboard != null && clipboard.isDataFlavorAvailable(DataFlavor.stringFlavor)) {
+            try {
+                clipboardText = (String) clipboard.getData(DataFlavor.stringFlavor);
+            } catch (UnsupportedFlavorException e) {
+                // ignore
+            } catch (IOException e) {
+                // ignore
+            }
+        } else {
+            clipboardText = null;
+        }
+    }
 
-	/**
-	 * Get text clipboard contents when needed send to remote, or null vise versa
-	 *
-	 * @return clipboard string contents if it is changed from last method call
-	 * or null when clipboard contains non text object or clipboard contents didn't changed
-	 */
-	@Override
-	public String getRenewedClipboardText() {
-		String old = clipboardText;
-		updateSavedClipboardContent();
-		if (clipboardText != null && ! clipboardText.equals(old))
-			return clipboardText;
-		return null;
-	}
+    @Override
+    public String getClipboardText() {
+        return clipboardText;
+    }
 
-	@Override
-	public void setEnabled(boolean enable) {
-		if (! enable) {
-			isRunning = false;
-		}
-		if (enable && ! isEnabled) {
-			new Thread(this).start();
-		}
-		isEnabled = enable;
-	}
+    /**
+     * Get text clipboard contents when needed send to remote, or null vise versa
+     *
+     * @return clipboard string contents if it is changed from last method call
+     * or null when clipboard contains non text object or clipboard contents didn't changed
+     */
+    @Override
+    public String getRenewedClipboardText() {
+        String old = clipboardText;
+        updateSavedClipboardContent();
+        if (clipboardText != null && !clipboardText.equals(old))
+            return clipboardText;
+        return null;
+    }
 
-	@Override
-	public void run() {
-		isRunning = true;
-		while (isRunning) {
-			String clipboardText = getRenewedClipboardText();
-			if (clipboardText != null) {
-				context.sendMessage(new ClientCutTextMessage(clipboardText.getBytes(charset)));
-			}
-			try {
-				Thread.sleep(CLIPBOARD_UPDATE_CHECK_INTERVAL_MILS);
-			} catch (InterruptedException e) { continue; }
-		}
-	}
+    @Override
+    public void setEnabled(boolean enable) {
+        if (!enable) {
+            isRunning = false;
+        }
+        if (enable && !isEnabled) {
+            new Thread(this).start();
+        }
+        isEnabled = enable;
+    }
 
-	@Override
-	public void settingsChanged(SettingsChangedEvent e) {
-		ProtocolSettings settings = (ProtocolSettings) e.getSource();
-		setEnabled(settings.isAllowClipboardTransfer());
-	}
+    @Override
+    public void run() {
+        isRunning = true;
+        while (isRunning) {
+            String clipboardText = getRenewedClipboardText();
+            if (clipboardText != null) {
+                context.sendMessage(new ClientCutTextMessage(clipboardText.getBytes(charset)));
+            }
+            try {
+                Thread.sleep(CLIPBOARD_UPDATE_CHECK_INTERVAL_MILS);
+            } catch (InterruptedException e) {
+                continue;
+            }
+        }
+    }
+
+    @Override
+    public void settingsChanged(SettingsChangedEvent e) {
+        ProtocolSettings settings = (ProtocolSettings) e.getSource();
+        setEnabled(settings.isAllowClipboardTransfer());
+    }
 
 }

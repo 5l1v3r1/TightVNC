@@ -29,19 +29,19 @@ import com.glavsoft.rfb.encoding.PixelFormat;
 import com.glavsoft.transport.Writer;
 
 public class SetPixelFormatMessage implements ClientToServerMessage {
-	private final PixelFormat pixelFormat;
+    private final PixelFormat pixelFormat;
 
-	public SetPixelFormatMessage(PixelFormat pixelFormat) {
-		this.pixelFormat = pixelFormat;
-	}
+    public SetPixelFormatMessage(PixelFormat pixelFormat) {
+        this.pixelFormat = pixelFormat;
+    }
 
-	@Override
-	public void send(Writer writer) throws TransportException {
-		writer.writeByte(SET_PIXEL_FORMAT);
-		writer.writeInt16(0);
-		writer.writeByte(0);
-		pixelFormat.send(writer);
-		writer.flush();
-	}
+    @Override
+    public void send(Writer writer) throws TransportException {
+        writer.writeByte(SET_PIXEL_FORMAT);
+        writer.writeInt16(0);
+        writer.writeByte(0);
+        pixelFormat.send(writer);
+        writer.flush();
+    }
 
 }

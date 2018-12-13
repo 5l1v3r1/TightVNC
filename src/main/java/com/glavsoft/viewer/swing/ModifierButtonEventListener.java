@@ -24,21 +24,22 @@
 
 package com.glavsoft.viewer.swing;
 
+import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JToggleButton;
-
 public class ModifierButtonEventListener {
-	Map<Integer, JToggleButton> buttons = new HashMap<Integer, JToggleButton>();
-	public void addButton(int keyCode, JToggleButton button) {
-		buttons.put(keyCode, button);
-	}
-	public void fireEvent(KeyEvent e) {
-		int code = e.getKeyCode();
-		if (buttons.containsKey(code)) {
-			buttons.get(code).setSelected(e.getID() == KeyEvent.KEY_PRESSED);
-		}
-	}
+    Map<Integer, JToggleButton> buttons = new HashMap<Integer, JToggleButton>();
+
+    public void addButton(int keyCode, JToggleButton button) {
+        buttons.put(keyCode, button);
+    }
+
+    public void fireEvent(KeyEvent e) {
+        int code = e.getKeyCode();
+        if (buttons.containsKey(code)) {
+            buttons.get(code).setSelected(e.getID() == KeyEvent.KEY_PRESSED);
+        }
+    }
 }

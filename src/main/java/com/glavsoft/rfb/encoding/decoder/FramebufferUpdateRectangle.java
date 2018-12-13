@@ -38,40 +38,42 @@ import com.glavsoft.transport.Reader;
  * and then follows the pixel data in the specified encoding
  */
 public class FramebufferUpdateRectangle {
-	public int x;
-	public int y;
-	public int width;
-	public int height;
+    public int x;
+    public int y;
+    public int width;
+    public int height;
     private EncodingType encodingType;
 
-	public FramebufferUpdateRectangle() {
-		// nop
-	}
+    public FramebufferUpdateRectangle() {
+        // nop
+    }
 
-	public FramebufferUpdateRectangle(int x, int y, int w, int h) {
-		this.x = x; this.y = y;
-		width = w; height = h;
-	}
+    public FramebufferUpdateRectangle(int x, int y, int w, int h) {
+        this.x = x;
+        this.y = y;
+        width = w;
+        height = h;
+    }
 
-	public void fill(Reader reader) throws TransportException {
-    	x = reader.readUInt16();
+    public void fill(Reader reader) throws TransportException {
+        x = reader.readUInt16();
         y = reader.readUInt16();
         width = reader.readUInt16();
         height = reader.readUInt16();
         int encoding = reader.readInt32();
-		encodingType = EncodingType.byId(encoding);
+        encodingType = EncodingType.byId(encoding);
     }
 
-	public EncodingType getEncodingType() {
-		return encodingType;
-	}
+    public EncodingType getEncodingType() {
+        return encodingType;
+    }
 
-	@Override
-	public String toString() {
-		return "FramebufferUpdateRect: [x: " + x + ", y: " + y +
-			", width: " + width + ", height: " + height +
-			", encodingType: " + encodingType +
-			"]";
-	}
+    @Override
+    public String toString() {
+        return "FramebufferUpdateRect: [x: " + x + ", y: " + y +
+                ", width: " + width + ", height: " + height +
+                ", encodingType: " + encodingType +
+                "]";
+    }
 
 }

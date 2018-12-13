@@ -29,37 +29,37 @@ import com.glavsoft.transport.Writer;
 
 
 public class FramebufferUpdateRequestMessage implements ClientToServerMessage {
-	private final boolean incremental;
-	private final int height;
-	private final int width;
-	private final int y;
-	private final int x;
+    private final boolean incremental;
+    private final int height;
+    private final int width;
+    private final int y;
+    private final int x;
 
-	public FramebufferUpdateRequestMessage(int x, int y, int width,
-			int height, boolean incremental) {
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
-		this.incremental = incremental;
-	}
+    public FramebufferUpdateRequestMessage(int x, int y, int width,
+                                           int height, boolean incremental) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.incremental = incremental;
+    }
 
-	@Override
-	public void send(Writer writer) throws TransportException {
-		writer.writeByte(FRAMEBUFFER_UPDATE_REQUEST);
-		writer.writeByte(incremental ? 1 : 0);
-		writer.writeInt16(x);
-		writer.writeInt16(y);
-		writer.writeInt16(width);
-		writer.writeInt16(height);
-		writer.flush();
-	}
+    @Override
+    public void send(Writer writer) throws TransportException {
+        writer.writeByte(FRAMEBUFFER_UPDATE_REQUEST);
+        writer.writeByte(incremental ? 1 : 0);
+        writer.writeInt16(x);
+        writer.writeInt16(y);
+        writer.writeInt16(width);
+        writer.writeInt16(height);
+        writer.flush();
+    }
 
-	@Override
-	public String toString() {
-		return "FramebufferUpdateRequestMessage: [x: " + x + " y: " + y
-		+ " width: " + width + " height: " + height +
-		" incremental: " + incremental + "]";
-	}
+    @Override
+    public String toString() {
+        return "FramebufferUpdateRequestMessage: [x: " + x + " y: " + y
+                + " width: " + width + " height: " + height +
+                " incremental: " + incremental + "]";
+    }
 
 }
